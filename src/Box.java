@@ -39,6 +39,9 @@ public class Box extends Rectangle {
 			@Override
 			public void handle(MouseEvent event) {
 				controller.selectBox(thisBox);
+				if (controller.isAddingRelation()) {
+					controller.endCurrentRelation();
+				}
 				event.consume();
 			}
 		});

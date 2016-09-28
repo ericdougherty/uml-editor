@@ -7,8 +7,9 @@ import javafx.scene.layout.VBox;
 public class ContextMenu extends VBox {
 
 	Controller controller;
-	Button delete;
+	Button deleteBox;
 	Button addBox;
+	Button addRelation;
 
 	public ContextMenu(Controller c) {
 		super();
@@ -29,12 +30,21 @@ public class ContextMenu extends VBox {
 			}
 		});
 		
-		delete = new Button("Delete Box");
+		deleteBox = new Button("Delete Box");
 
-		delete.setOnAction(new EventHandler<ActionEvent>() {
+		deleteBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				controller.deleteSelected();
+			}
+		});
+		
+		addRelation = new Button("Add Relation");
+
+		addRelation.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				controller.startNewRelation();
 			}
 		});
 
@@ -43,11 +53,19 @@ public class ContextMenu extends VBox {
 	}
 
 	public void showDeleteButton() {
-		getChildren().add(delete);
+		getChildren().add(deleteBox);
 	}
 	
 	public void hideDeleteButton() {
-		getChildren().remove(delete);
+		getChildren().remove(deleteBox);
+	}
+
+	public void showAddRelationButton() {
+		getChildren().add(addRelation);
+	}
+	
+	public void hideAddRelationButton() {
+		getChildren().remove(addRelation);
 	}
 
 }
