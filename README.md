@@ -5,7 +5,7 @@ Authors:
   fiVe:
     Matt
     Tim
-    Kelly
+    Kelsey
     Eric
     Ryan
   
