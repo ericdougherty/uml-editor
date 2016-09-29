@@ -16,6 +16,11 @@
 	-fx-fill: #666;
 }
 
+#relation {
+	-fx-stroke: #666;
+	-fx-stroke-width: 3.0;
+}
+
 .menu {
 	-fx-background-color: #222;
 }

@@ -26,7 +26,7 @@ public class ContextMenu extends VBox {
 			public void handle(ActionEvent event) {
 				Box rect = new Box(20, 20, 141, 241, controller);
 				controller.workspace.getChildren().add(rect);
-
+				controller.cancelCurrentRelation();
 			}
 		});
 		
@@ -36,6 +36,7 @@ public class ContextMenu extends VBox {
 			@Override
 			public void handle(ActionEvent event) {
 				controller.deleteSelected();
+				controller.cancelCurrentRelation();
 			}
 		});
 		

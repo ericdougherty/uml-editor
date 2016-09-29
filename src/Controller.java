@@ -72,13 +72,22 @@ public class Controller {
 		if (selectedBox != null && !selectedBox.equals(currentRelation.getStartingBox())) {
 			currentRelation.setEndPoint(selectedBox);
 			workspace.getChildren().add(currentRelation);
+			currentRelation.toBack();
 			currentRelation = null;
 			addingRelation = false;
+		} else {
+			//invalid ending box
+			cancelCurrentRelation();
 		}
 	}
 	
 	public boolean isAddingRelation() {
 		return addingRelation;
+	}
+	
+	public void cancelCurrentRelation() {
+		addingRelation = false;
+		currentRelation = null;
 	}
 
 }
