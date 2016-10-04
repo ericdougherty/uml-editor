@@ -11,18 +11,21 @@ public class Box extends Rectangle {
 		controller = c;
 		
 		setFill(null);
+		//css ID, should be changed to class
 		setId("rect");
 		Box thisBox = this;
 		
 		
-		//Eric- box corner jumps to cursor on drag, need to fix that
+		//box corner jumps to cursor on drag, need to fix that
 		setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				//css style to show grid while rectangle is being dragged - should be call to controller like below on setOnMouseReleased
 				controller.workspace.getStyleClass().remove("noGrid");
 				controller.workspace.getStyleClass().add("grid");
 				double x = event.getX();
 				double y = event.getY();
+				//round to nearest 20 px
 				setX(Math.floorDiv((int) x, 20) * 20);
 				setY(Math.floorDiv((int) y, 20) * 20);
 			}
@@ -42,6 +45,7 @@ public class Box extends Rectangle {
 				if (controller.isAddingRelation()) {
 					controller.endCurrentRelation();
 				}
+				//consume keeps event from interacting with elements below
 				event.consume();
 			}
 		});

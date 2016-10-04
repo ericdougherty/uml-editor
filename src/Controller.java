@@ -21,7 +21,8 @@ public class Controller {
 		ui.setTop(menu);
 		ui.setCenter(workspace);
 	}
-
+	
+	//rather than use setStroke(), we might want to use CSS here
 	public void selectBox(Box box) {
 		if (selectedBox == null) {
 			selectedBox = box;

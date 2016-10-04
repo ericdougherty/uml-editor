@@ -15,12 +15,20 @@ public class ContextMenu extends VBox {
 		super();
 		
 		controller = c;
-
+		
+		//space between buttons
 		setSpacing(10);
 		setPadding(new Insets(20, 10, 10, 10));
+		//preferred width - need to unify button widths and this won't be an issue
+		setPrefWidth(105);
 
 		addBox = new Button("Create Box");
+		deleteBox = new Button("Delete Box");
+		addRelation = new Button("Add Relation");
+		getChildren().add(addBox);
+		getStyleClass().add("vbox");
 
+		//addBox button is always visible - should this go away when something is selected?
 		addBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -29,9 +37,8 @@ public class ContextMenu extends VBox {
 				controller.cancelCurrentRelation();
 			}
 		});
-		
-		deleteBox = new Button("Delete Box");
 
+		//only available when a box is selected
 		deleteBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -39,18 +46,14 @@ public class ContextMenu extends VBox {
 				controller.cancelCurrentRelation();
 			}
 		});
-		
-		addRelation = new Button("Add Relation");
 
+		//only available when a box is selected
 		addRelation.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				controller.startNewRelation();
 			}
 		});
-
-		getChildren().add(addBox);
-		getStyleClass().add("vbox");
 	}
 
 	public void showDeleteButton() {
