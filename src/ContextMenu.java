@@ -19,11 +19,9 @@ public class ContextMenu extends VBox {
 		//space between buttons
 		setSpacing(10);
 		setPadding(new Insets(20, 10, 10, 10));
-		//preferred width - need to unify button widths and this won't be an issue
-		setPrefWidth(105);
 
-		addBox = new Button("Create Box");
-		deleteBox = new Button("Delete Box");
+		addBox = new Button("  Create Box  ");
+		deleteBox = new Button("  Delete Box  ");
 		addRelation = new Button("Add Relation");
 		getChildren().add(addBox);
 		getStyleClass().add("vbox");
