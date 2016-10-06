@@ -12,7 +12,7 @@ Matt McAnulty
 # UML Editor Design Summary #
 #############################
 
-      The focus on the overall design for the first iteration of the UML editor was primarily for developing the basic elements for an intuitive, consistent, and thought out UI that works well with the software’s design. While the functionality of this iteration was still a priority it was more important that we have a solid understanding of how we wanted the program to behave and look. Our thinking was that by taking the time to work this out early on it will (hopefully) save us from having to recode large parts of our program in order to add more features for future iterations.
+      The focus on the overall design for the first iteration of the UML editor was primarily for developing the basic elements for an intuitive, consistent, and thought out UI that works well with the softwareâ€™s design. While the functionality of this iteration was still a priority it was more important that we have a solid understanding of how we wanted the program to behave and look. Our thinking was that by taking the time to work this out early on it will (hopefully) save us from having to recode large parts of our program in order to add more features for future iterations.
 
 
 ##################################
