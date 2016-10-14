@@ -1,3 +1,5 @@
+package seproject5;
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -10,6 +12,7 @@ public class Controller {
 	Box selectedBox = null;
 	private Relation currentRelation = null;
 	private boolean addingRelation = false;
+	private Relation selectedRelation;
 
 	public Controller() {
 		toolbar = new ContextMenu(this);
@@ -24,17 +27,22 @@ public class Controller {
 	
 	//rather than use setStroke(), we might want to use CSS here
 	public void selectBox(Box box) {
+		
+		deselectRelation();
+		
 		if (selectedBox == null) {
 			selectedBox = box;
-			box.setStroke(Color.WHITE);
-		    toolbar.showDeleteButton();
-		    toolbar.showAddRelationButton();
+			selectedBox.setStroke(Color.WHITE);
+			toolbar.showAddRelationButton();
+			toolbar.showDeleteButton();
 		} 
 		else if (box != selectedBox) {
 			selectedBox.setStroke(null);
 			selectedBox = box;
-			box.setStroke(Color.WHITE);
+			selectedBox.setStroke(Color.WHITE);
 		}
+		
+	
 	}
 
 	public void deleteSelected() {
@@ -44,18 +52,37 @@ public class Controller {
 			toolbar.hideAddRelationButton();
 			selectedBox = null;
 		}
+		if (selectedRelation != null) {
+			workspace.getChildren().remove(selectedRelation);
+			toolbar.hideDeleteButton();
+			toolbar.showAddBoxButton();
+			selectedRelation = null;
+		}
 	}
 	
-	public void deselect() {
+	public void deselectBox() {
+
 		if (selectedBox != null){
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
 			selectedBox.setStroke(null);
 			selectedBox = null;
+			cancelCurrentRelation();
 		}
 		
 	}
-
+	
+	public void deselectRelation() {
+		
+		if (selectedRelation != null){
+			toolbar.hideDeleteButton();
+			toolbar.showAddBoxButton();
+			selectedRelation.setStroke(Color.GRAY);
+			selectedRelation = null;
+		}
+		
+	}
+	
 	public void showGrid() {
 		workspace.getStyleClass().add("noGrid");
 	}
@@ -63,7 +90,7 @@ public class Controller {
 	public void startNewRelation() {
 		if (selectedBox != null) {
 			addingRelation = true;
-			currentRelation = new Relation(selectedBox);
+			currentRelation = new Relation(selectedBox, this);
 		}
 	}
 	
@@ -89,6 +116,24 @@ public class Controller {
 	public void cancelCurrentRelation() {
 		addingRelation = false;
 		currentRelation = null;
+	}
+
+	public void selectRelation(Relation relation) {
+		
+		deselectBox();
+		
+		if (selectedRelation == null) {
+			selectedRelation = relation;
+			selectedRelation.setStroke(Color.WHITE);
+			toolbar.hideAddBoxButton();
+			toolbar.hideAddRelationButton();
+			toolbar.showDeleteButton();
+		} 
+		else if (selectedRelation != relation) {
+			selectedRelation.setStroke(null);
+			selectedRelation = relation;
+			selectedRelation.setStroke(Color.WHITE);
+		}
 	}
 
 }
