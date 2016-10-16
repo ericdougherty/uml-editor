@@ -1,5 +1,3 @@
-package seproject5;
-
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -11,6 +9,7 @@ public class WorkSpace extends Pane{
 	public WorkSpace(Controller c) {
 		
 		controller = c;
+		WorkSpace workspace = this;
 		
 		getStyleClass().add("noGrid");
 		
@@ -19,6 +18,8 @@ public class WorkSpace extends Pane{
 			public void handle(MouseEvent event) {
 				controller.deselectBox();
 				controller.deselectRelation();
+				workspace.requestFocus();
+				
 			}
 		});
 	}

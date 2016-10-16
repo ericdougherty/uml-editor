@@ -1,5 +1,3 @@
-package seproject5;
-
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -25,24 +23,20 @@ public class Controller {
 		ui.setCenter(workspace);
 	}
 	
-	//rather than use setStroke(), we might want to use CSS here
 	public void selectBox(Box box) {
 		
 		deselectRelation();
 		
 		if (selectedBox == null) {
 			selectedBox = box;
-			selectedBox.setStroke(Color.WHITE);
 			toolbar.showAddRelationButton();
 			toolbar.showDeleteButton();
 		} 
 		else if (box != selectedBox) {
-			selectedBox.setStroke(null);
+			selectedBox.getStyleClass().remove("box-shadow");
 			selectedBox = box;
-			selectedBox.setStroke(Color.WHITE);
 		}
-		
-	
+		box.getStyleClass().add("box-shadow");
 	}
 
 	public void deleteSelected() {
@@ -65,7 +59,7 @@ public class Controller {
 		if (selectedBox != null){
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
-			selectedBox.setStroke(null);
+			selectedBox.getStyleClass().remove("box-shadow");
 			selectedBox = null;
 			cancelCurrentRelation();
 		}

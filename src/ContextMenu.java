@@ -1,12 +1,8 @@
-package seproject5;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 
 public class ContextMenu extends VBox {
 
@@ -17,8 +13,6 @@ public class ContextMenu extends VBox {
 	//private int p;
 
 	public ContextMenu(Controller c) {
-		super();
-		
 		controller = c;
 		
 		//space between buttons
@@ -37,7 +31,7 @@ public class ContextMenu extends VBox {
 		addBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Box rect = new Box(20, 20, 141, 241, controller);
+				Box rect = new Box(controller);
 				controller.workspace.getChildren().add(rect);
 				controller.cancelCurrentRelation();
 			}

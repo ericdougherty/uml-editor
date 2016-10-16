@@ -1,5 +1,3 @@
-package seproject5;
-
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
@@ -13,13 +11,13 @@ public class Relation extends Line {
 	public Relation(Box startBox, Controller c) {
 		this.controller = c;
 		this.startBox = startBox;
-		double startX = startBox.getX() + (startBox.getWidth() / 2);
-		double startY = startBox.getY() + (startBox.getHeight() / 2);
+		double startX = startBox.getLayoutX() + (startBox.getWidth() / 2);
+		double startY = startBox.getLayoutY() + (startBox.getHeight() / 2);
 		setStartX(((int)(startX / 20)) * 20);
 		setStartY(((int)(startY / 20)) * 20);
 		final Relation relation = this;
 		
-		setId("relation");
+		getStyleClass().add("relation");
 		
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
@@ -32,8 +30,8 @@ public class Relation extends Line {
 	}
 
 	public void setEndPoint(Box endBox) {
-		double endX = endBox.getCurrentX() + (endBox.getWidth() / 2);
-		double endY = endBox.getCurrentY() + (endBox.getHeight() / 2);
+		double endX = endBox.getLayoutX() + (endBox.getWidth() / 2);
+		double endY = endBox.getLayoutY() + (endBox.getHeight() / 2);
 		setEndX(((int)(endX / 20)) * 20);
 		setEndY(((int)(endY / 20)) * 20);
 	}
