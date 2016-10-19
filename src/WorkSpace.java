@@ -19,7 +19,6 @@ public class WorkSpace extends Pane{
 				controller.deselectBox();
 				controller.deselectRelation();
 				workspace.requestFocus();
-				
 			}
 		});
 	}
