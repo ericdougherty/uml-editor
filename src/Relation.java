@@ -1,5 +1,3 @@
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
@@ -13,12 +11,9 @@ public class Relation extends Line {
 	public Relation(Box startBox, Controller c) {
 		this.controller = c;
 		this.startBox = startBox;
-		DoubleProperty startX = new SimpleDoubleProperty();
-		DoubleProperty startY = new SimpleDoubleProperty();
-		startXProperty().bind(startX);
-		startYProperty().bind(startY);
-		startX.bind(startBox.layoutXProperty().add(startBox.widthProperty().divide(2)));
-		startY.bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
+		//not necessarily a grid position
+		startXProperty().bind(startBox.layoutXProperty().add(startBox.widthProperty().divide(2)));
+		startYProperty().bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
 		final Relation relation = this;
 		
 		getStyleClass().add("relation");
@@ -34,12 +29,9 @@ public class Relation extends Line {
 	}
 
 	public void setEndPoint(Box endBox) {
-		DoubleProperty endX = new SimpleDoubleProperty();
-		DoubleProperty endY = new SimpleDoubleProperty();
-		endXProperty().bind(endX);
-		endYProperty().bind(endY);
-		endX.bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
-		endY.bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
+		//not necessarily a grid position
+		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
+		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
 	}
 
 	public Box getStartingBox() {
