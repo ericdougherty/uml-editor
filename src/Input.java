@@ -1,4 +1,3 @@
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
@@ -11,7 +10,7 @@ public class Input extends TextField{
 		
 		parent = p;
 		
-		final Input thisInput = this;
+		Input thisInput = this;
 		
 		//set input text to previous value unless it is the prompt text
 		if (!s.equals(p.prompt)) {

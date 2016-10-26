@@ -1,4 +1,3 @@
-
 import javafx.scene.layout.VBox;
 
 public class Section extends VBox {
@@ -57,4 +56,3 @@ public class Section extends VBox {
 	}
 
 }
-

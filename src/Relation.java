@@ -1,4 +1,3 @@
-
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
@@ -8,13 +7,14 @@ public class Relation extends Line {
 	private Box startBox = null;
 	Controller controller;
 	Relation relation;
-	Integer id;
 
-	public Relation(Box startBox, Controller c, Model model) {
+	public Relation(Box startBox, Controller c) {
 		this.controller = c;
 		this.startBox = startBox;
-		startXProperty().bind(startBox.layoutXProperty().add(startBox.widthProperty().divide(2)));
-		startYProperty().bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
+		double startX = startBox.getLayoutX() + (startBox.getWidth() / 2);
+		double startY = startBox.getLayoutY() + (startBox.getHeight() / 2);
+		setStartX(((int)(startX / 20)) * 20);
+		setStartY(((int)(startY / 20)) * 20);
 		final Relation relation = this;
 		
 		getStyleClass().add("relation");
@@ -30,8 +30,10 @@ public class Relation extends Line {
 	}
 
 	public void setEndPoint(Box endBox) {
-		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
-		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
+		double endX = endBox.getLayoutX() + (endBox.getWidth() / 2);
+		double endY = endBox.getLayoutY() + (endBox.getHeight() / 2);
+		setEndX(((int)(endX / 20)) * 20);
+		setEndY(((int)(endY / 20)) * 20);
 	}
 
 	public Box getStartingBox() {
