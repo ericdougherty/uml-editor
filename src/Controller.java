@@ -1,26 +1,35 @@
+
+import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
 public class Controller {
 
+	Model model;
 	ContextMenu toolbar;
 	FileMenu menu;
 	WorkSpace workspace;
+	ScrollBar scrollbar;
 	BorderPane ui;
 	Box selectedBox = null;
 	private Relation currentRelation = null;
 	private boolean addingRelation = false;
 	private Relation selectedRelation;
 
-	public Controller() {
-		toolbar = new ContextMenu(this);
-		menu = new FileMenu();
+	public Controller(Model model) {
+		this.model = model;
+		toolbar = new ContextMenu(this, model);
+		menu = new FileMenu(model);
 		workspace = new WorkSpace(this);
+		scrollbar = new VerticalScrollbar(this);
 		ui = new BorderPane();
+		
+		workspace.setMinHeight(1742);
 		
 		ui.setLeft(toolbar);
 		ui.setTop(menu);
 		ui.setCenter(workspace);
+		ui.setRight(scrollbar);
 	}
 	
 	public void selectBox(Box box) {
@@ -29,6 +38,7 @@ public class Controller {
 		
 		if (selectedBox == null) {
 			selectedBox = box;
+			toolbar.hideAddBoxButton();
 			toolbar.showAddRelationButton();
 			toolbar.showDeleteButton();
 			selectedBox.getStyleClass().add("box-shadow");
@@ -47,6 +57,7 @@ public class Controller {
 			workspace.getChildren().remove(selectedBox);
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
+			toolbar.showAddBoxButton();
 			selectedBox = null;
 		}
 		if (selectedRelation != null) {
@@ -62,6 +73,7 @@ public class Controller {
 		if (selectedBox != null){
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
+			toolbar.showAddBoxButton();
 			selectedBox.deselect();
 			selectedBox.getStyleClass().remove("box-shadow");
 			selectedBox = null;
@@ -88,7 +100,7 @@ public class Controller {
 	public void startNewRelation() {
 		if (selectedBox != null) {
 			addingRelation = true;
-			currentRelation = new Relation(selectedBox, this);
+			currentRelation = new Relation(selectedBox, this, model);
 		}
 	}
 	
@@ -135,3 +147,4 @@ public class Controller {
 	}
 
 }
+
