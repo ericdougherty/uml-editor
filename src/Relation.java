@@ -11,29 +11,27 @@ public class Relation extends Line {
 	public Relation(Box startBox, Controller c) {
 		this.controller = c;
 		this.startBox = startBox;
-		double startX = startBox.getLayoutX() + (startBox.getWidth() / 2);
-		double startY = startBox.getLayoutY() + (startBox.getHeight() / 2);
-		setStartX(((int)(startX / 20)) * 20);
-		setStartY(((int)(startY / 20)) * 20);
+		// not necessarily a grid position
+		startXProperty().bind(startBox.layoutXProperty().add(startBox.widthProperty().divide(2)));
+		startYProperty().bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
 		final Relation relation = this;
-		
+
 		getStyleClass().add("relation");
-		
+
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				controller.selectRelation(relation);
-				//consume keeps event from interacting with elements below
+				// consume keeps event from interacting with elements below
 				event.consume();
 			}
 		});
 	}
 
 	public void setEndPoint(Box endBox) {
-		double endX = endBox.getLayoutX() + (endBox.getWidth() / 2);
-		double endY = endBox.getLayoutY() + (endBox.getHeight() / 2);
-		setEndX(((int)(endX / 20)) * 20);
-		setEndY(((int)(endY / 20)) * 20);
+		// not necessarily a grid position
+		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
+		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
 	}
 
 	public Box getStartingBox() {

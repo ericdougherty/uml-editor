@@ -3,8 +3,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class ContextMenu extends VBox {
 
@@ -12,16 +10,6 @@ public class ContextMenu extends VBox {
 	Button delete;
 	Button addBox;
 	Button addRelation;
-        
-        Image imageDelete = new Image(getClass().getResourceAsStream("/src/b_eras.png"));
-        Image imageBox = new Image(getClass().getResourceAsStream("/src/b_cbox.png"));
-        Image imageRelation = new Image(getClass().getResourceAsStream("/src/b_rela.png"));
-        Image imageAggrigation = new Image(getClass().getResourceAsStream("/src/b_aggr.png"));
-        Image imageComposion = new Image(getClass().getResourceAsStream("/src/b_comp.png"));
-        Image imageDependency = new Image(getClass().getResourceAsStream("/src/b_depe.png"));
-        Image imageGeneralization = new Image(getClass().getResourceAsStream("/src/b_gene.png"));
-        Image imageLine = new Image(getClass().getResourceAsStream("/src/b_line.png"));
-        
 	//private int p;
 
 	public ContextMenu(Controller c) {
@@ -34,14 +22,8 @@ public class ContextMenu extends VBox {
 		setPrefWidth(105);
 
 		addBox = new Button("Create Box");
-                addBox.setGraphic(new ImageView(imageBox));
-                
 		addRelation = new Button("Add Relation");
-                addRelation.setGraphic(new ImageView(imageRelation));
-                
 		delete = new Button("Delete");
-                delete.setGraphic(new ImageView(imageDelete));
-                
 		getChildren().add(addBox);
 		getStyleClass().add("vbox");
 
