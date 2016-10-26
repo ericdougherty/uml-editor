@@ -1,4 +1,3 @@
-
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -8,19 +7,14 @@ public class Box extends VBox {
 	Section[] sections = new Section[4];
 	Double coordX;
 	Double coordY;
-	Integer previousx = 0;
-	Integer previousy = 0;
-	Integer id;
 
-	public Box(Controller c, Model model) {
+	public Box(Controller c) {
 		controller = c;
 		
 		getStyleClass().add("box");
-		final Box thisBox = this;
-		setPrefWidth(141);
+		Box thisBox = this;
 		setPrefHeight(241);
-		
-		//RectangleData boxdata = new RectangleData(141,241,0,20,,model,id);
+		setPrefWidth(141);
 		
 		sections[0] = new Section(this, "add class name");
 		sections[1] = new Section(this, "add attribute");
@@ -37,16 +31,6 @@ public class Box extends VBox {
 				controller.workspace.getStyleClass().add("grid");
 				double x = event.getSceneX() - coordX;
 				double y = event.getSceneY() - coordY;
-				if((x < 0) || (y < 20)){
-					x = previousx;
-					y = previousy;
-				}
-				if(((x + thisBox.getWidth()) > controller.workspace.getWidth()) || ((y + thisBox.getHeight()) > controller.workspace.getHeight())){
-					x = previousx;
-					y = previousy;
-				}
-				previousx = Math.floorDiv((int) x, 20) * 20;
-				previousy = Math.floorDiv((int) y, 20) * 20;
 				//round to nearest 20 px
 				relocate(Math.floorDiv((int) x, 20) * 20, Math.floorDiv((int) y, 20) * 20);
 			}
@@ -63,7 +47,7 @@ public class Box extends VBox {
 		setOnMouseReleased(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent arg0) {
-				controller.showGrid();
+				controller.showGrid();			
 			}
 		});
 		
@@ -78,8 +62,7 @@ public class Box extends VBox {
 				event.consume();
 			}
 		});
-		
-	}	
+	}
 	
 	public void deselect() {
 		boolean okayToHide = true;

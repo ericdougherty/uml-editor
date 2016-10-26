@@ -1,38 +1,61 @@
-
 import java.util.ArrayList;
 
 public class LineData {
 	
-	Double startx;
-	Double starty;
-	Double endx;
-	Double endy;
-	ArrayList<String> linetextdata;
-	Integer id;
+	private double startx;
+	private double starty;
+	private double endx;
+	private double endy;
+	private ArrayList<String> linetextdata;
 
-	public LineData(Double startx, Double starty, Double endx, Double endy,
-			ArrayList<String> linetextdata, Model model, Integer id) {
+	public LineData(double startx, double starty, double endx, double endy,
+			ArrayList<String> linetextdata, Model model) {
 		this.startx = startx;
 		this.starty = starty;
 		this.endx = endx;
 		this.endy = endy;
 		this.linetextdata = linetextdata;
-		this.id = id;
-		model.getLineMap().put(id, this);
-	}
-	
-	public void ResetLineData(Double startx, Double starty, Double endx, Double endy,
-			ArrayList<String> linetextdata, Model model, Integer id) {
-		this.startx = startx;
-		this.starty = starty;
-		this.endx = endx;
-		this.endy = endy;
-		this.linetextdata = linetextdata;
-		model.getLineMap().replace(id, this);
+		model.getLinelist().add(this);
 	}
 
-	public void DeleteLineData(Model model, Integer id) {
-		model.getLineMap().remove(id);
+	public double getStartx() {
+		return startx;
+	}
+
+	public void setStartx(double startx) {
+		this.startx = startx;
+	}
+
+	public double getStarty() {
+		return starty;
+	}
+
+	public void setStarty(double starty) {
+		this.starty = starty;
+	}
+
+	public double getEndx() {
+		return endx;
+	}
+
+	public void setEndx(double endx) {
+		this.endx = endx;
+	}
+
+	public double getEndy() {
+		return endy;
+	}
+
+	public void setEndy(double endy) {
+		this.endy = endy;
+	}
+
+	public ArrayList<String> getLinetextdata() {
+		return linetextdata;
+	}
+
+	public void setLinetextdata(ArrayList<String> linetextdata) {
+		this.linetextdata = linetextdata;
 	}
 
 }

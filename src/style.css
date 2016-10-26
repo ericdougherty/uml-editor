@@ -36,7 +36,7 @@
 	-fx-background-color: #222;
 }
 
-.menu .label {
+.menu .label{
 	-fx-text-fill: #999;
 }
 
@@ -44,6 +44,3 @@
 	-fx-text-fill: #fff;
 }
 
-.scroll-bar {
-	-fx-background-color: #222;
-}
