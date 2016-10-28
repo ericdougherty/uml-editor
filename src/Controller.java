@@ -92,11 +92,11 @@ public class Controller {
 		}
 	}
 	
-	public void endCurrentRelation() {
+	public void endCurrentRelation(Box b) {
 		//only end relation if a box is selected
 		//and the ending box and starting box are different
-		if (selectedBox != null && !selectedBox.equals(currentRelation.getStartingBox())) {
-			currentRelation.setEndPoint(selectedBox);
+		if (b != null && !b.equals(currentRelation.getStartingBox())) {
+			currentRelation.setEndPoint(b);
 			workspace.getChildren().add(currentRelation);
 			currentRelation.toBack();
 			currentRelation = null;

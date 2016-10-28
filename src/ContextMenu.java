@@ -31,6 +31,7 @@ public class ContextMenu extends VBox {
 		addBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				controller.deselectBox();
 				Box rect = new Box(controller);
 				controller.workspace.getChildren().add(rect);
 				controller.cancelCurrentRelation();

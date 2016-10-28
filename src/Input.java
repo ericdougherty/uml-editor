@@ -33,5 +33,9 @@ public class Input extends TextField{
 		});
 		
 	}
+	
+	public Input() {
+		parent = null;
+	}
 
 }

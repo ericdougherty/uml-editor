@@ -13,13 +13,12 @@ public class Box extends VBox {
 		
 		getStyleClass().add("box");
 		Box thisBox = this;
-		setPrefHeight(241);
 		setPrefWidth(141);
 		
-		sections[0] = new Section(this, "add class name");
-		sections[1] = new Section(this, "add attribute");
-		sections[2] = new Section(this, "add operation");
-		sections[3] = new Section(this, "add miscellaneous");
+		sections[0] = new Section(this, "add class name", true);
+		sections[1] = new Section(this, "add attribute", false);
+		sections[2] = new Section(this, "add operation", false);
+		sections[3] = new Section(this, "add miscellaneous", false);
 		
 		getChildren().addAll(sections[0], sections[1], sections[2], sections[3]);
 		
@@ -54,21 +53,27 @@ public class Box extends VBox {
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {				
-				controller.selectBox(thisBox);
+				
 				if (controller.isAddingRelation()) {
-					controller.endCurrentRelation();
+					controller.endCurrentRelation(thisBox);
+				}
+				else if (thisBox != controller.selectedBox) {
+					controller.deselectBox();
+					controller.selectBox(thisBox);
 				}
 				//consume keeps event from interacting with elements below
 				event.consume();
 			}
 		});
+		
+		controller.selectBox(this);
 	}
 	
 	public void deselect() {
 		boolean okayToHide = true;
-		for (int i = 3; i > -1; --i){
+		for (int i = 3; i >= 1; --i){
 			sections[i].deselect();
-			if (okayToHide && sections[i].isEmpty()) {
+			if (okayToHide && !sections[i].isTitle && sections[i].isEmpty()) {
 				getChildren().remove(sections[i]);
 			}
 			else {
