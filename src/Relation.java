@@ -28,7 +28,6 @@ public class Relation extends Line {
 			}
 		});
 		text = new Input();
-		controller.workspace.getChildren().add(text);
 	}
 
 	public void setEndPoint(Box endBox) {
@@ -36,6 +35,7 @@ public class Relation extends Line {
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
 		
+		controller.workspace.getChildren().add(text);
 		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.widthProperty())).divide(2));
 		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.heightProperty().multiply(2))).divide(2));
 	}
