@@ -3,12 +3,14 @@ import javafx.scene.layout.VBox;
 public class Section extends VBox {
 	Box parent;
 	String prompt;
+	boolean isTitle;
 
-	public Section(Box b, String s) {
+	public Section(Box b, String s, boolean t) {
 		parent = b;
 		prompt = s;
+		isTitle = t;
 		
-		setMinHeight(60);
+		setMinHeight(30);
 		getStyleClass().add("section");
 	}
 
@@ -36,7 +38,7 @@ public class Section extends VBox {
 		getChildren().remove(inputBox);
 		
 		//add another input if prev input wasn't blank and we're at the end of the list
-		if (!str.equals(prompt) && index == getChildren().size() - 1) {
+		if (!str.equals(prompt) && index == getChildren().size() - 1 && !isTitle) {
 			addInput(prompt, null);
 		}
 
@@ -51,8 +53,10 @@ public class Section extends VBox {
 	}
 	
 	public void select() {
-		TextLine placeholder = new TextLine(prompt, this);
-		getChildren().add(placeholder);
+		if (!isTitle || (isTitle && isEmpty()) ) {
+			TextLine placeholder = new TextLine(prompt, this);
+			getChildren().add(placeholder);
+		}
 	}
 
 }

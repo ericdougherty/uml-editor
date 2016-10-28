@@ -7,6 +7,7 @@ public class Relation extends Line {
 	private Box startBox = null;
 	Controller controller;
 	Relation relation;
+	Input text;
 
 	public Relation(Box startBox, Controller c) {
 		this.controller = c;
@@ -26,12 +27,17 @@ public class Relation extends Line {
 				event.consume();
 			}
 		});
+		text = new Input();
+		controller.workspace.getChildren().add(text);
 	}
 
 	public void setEndPoint(Box endBox) {
 		// not necessarily a grid position
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
+		
+		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.widthProperty())).divide(2));
+		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.heightProperty().multiply(2))).divide(2));
 	}
 
 	public Box getStartingBox() {
