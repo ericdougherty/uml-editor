@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -11,12 +14,14 @@ public class Controller {
 	private Relation currentRelation = null;
 	private boolean addingRelation = false;
 	private Relation selectedRelation;
+	private Set<Relation> relations;
 
 	public Controller() {
 		toolbar = new ContextMenu(this);
 		menu = new FileMenu();
 		workspace = new WorkSpace(this);
 		ui = new BorderPane();
+		relations = new HashSet<Relation>();
 		
 		ui.setLeft(toolbar);
 		ui.setTop(menu);
@@ -50,7 +55,7 @@ public class Controller {
 			selectedBox = null;
 		}
 		if (selectedRelation != null) {
-			workspace.getChildren().remove(selectedRelation);
+			selectedRelation.remove();
 			toolbar.hideDeleteButton();
 			toolbar.showAddBoxButton();
 			selectedRelation = null;
@@ -133,5 +138,18 @@ public class Controller {
 			selectedRelation.setStroke(Color.WHITE);
 		}
 	}
-
+	
+	public void addRelation(Relation r) {
+		relations.add(r);
+	}
+	
+	public void removeRelation(Relation r) {
+		relations.remove(r);
+	}
+	
+	public void updateRelations() {
+		for (Relation r : relations) {
+			r.update();
+		}
+	}
 }
