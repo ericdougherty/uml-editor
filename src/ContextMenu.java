@@ -3,6 +3,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Tooltip;
 
 public class ContextMenu extends VBox {
 
@@ -10,6 +13,15 @@ public class ContextMenu extends VBox {
 	Button delete;
 	Button addBox;
 	Button addRelation;
+        
+        Image imageDelete = new Image(getClass().getResourceAsStream("/buttons/b_eras.png"));
+        Image imageBox = new Image(getClass().getResourceAsStream("/buttons/b_cbox.png"));
+        Image imageRelation = new Image(getClass().getResourceAsStream("/buttons/b_rela.png"));
+        Image imageAggrigation = new Image(getClass().getResourceAsStream("/buttons/b_aggr.png"));
+        Image imageComposion = new Image(getClass().getResourceAsStream("/buttons/b_comp.png"));
+        Image imageDependency = new Image(getClass().getResourceAsStream("/buttons/b_depe.png"));
+        Image imageGeneralization = new Image(getClass().getResourceAsStream("/buttons/b_gene.png"));
+        Image imageLine = new Image(getClass().getResourceAsStream("/buttons/b_line.png"));
 	//private int p;
 
 	public ContextMenu(Controller c) {
@@ -37,6 +49,9 @@ public class ContextMenu extends VBox {
 				controller.cancelCurrentRelation();
 			}
 		});
+                
+                addBox.setGraphic(new ImageView(imageBox));
+                addBox.setTooltip(new Tooltip("New Class Box"));
 
 		delete.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -45,6 +60,9 @@ public class ContextMenu extends VBox {
 				controller.cancelCurrentRelation();
 			}
 		});
+                
+                delete.setGraphic(new ImageView(imageDelete));
+                delete.setTooltip(new Tooltip("Delete"));
 
 		//only available when a box is selected
 		addRelation.setOnAction(new EventHandler<ActionEvent>() {
@@ -53,6 +71,9 @@ public class ContextMenu extends VBox {
 				controller.startNewRelation();
 			}
 		});
+                
+                addRelation.setGraphic(new ImageView(imageRelation));
+                addRelation.setTooltip(new Tooltip("Add a new Realtion"));
 	}
 
 	public void showDeleteButton() {
