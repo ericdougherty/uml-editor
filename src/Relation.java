@@ -4,9 +4,9 @@ import javafx.scene.shape.*;
 
 public class Relation extends Line {
 
-	private Box startBox = null;
+	Box startBox;
+	Box endBox;
 	Controller controller;
-	Relation relation;
 	Input text;
 
 	public Relation(Box startBox, Controller c) {
@@ -28,14 +28,18 @@ public class Relation extends Line {
 			}
 		});
 		text = new Input();
-		controller.workspace.getChildren().add(text);
 	}
 
-	public void setEndPoint(Box endBox) {
+	public void setEndPoint(Box b) {
+		endBox = b;
 		// not necessarily a grid position
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
 		
+		startBox.addRelation(this);
+		endBox.addRelation(this);
+		
+		controller.workspace.getChildren().add(text);
 		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.widthProperty())).divide(2));
 		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.heightProperty().multiply(2))).divide(2));
 	}

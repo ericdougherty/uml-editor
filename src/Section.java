@@ -1,3 +1,4 @@
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 public class Section extends VBox {
@@ -31,21 +32,22 @@ public class Section extends VBox {
 
 	public void processInput(Input inputBox) {
 		// if input is blank, use prompt for textline
-		String str = inputBox.getText().trim().equals("") ? prompt : inputBox.getText();
-		TextLine text = new TextLine(str, this);
-		int index = getChildren().indexOf(inputBox);
-		getChildren().set(index, text);
-		getChildren().remove(inputBox);
-		
-		//add another input if prev input wasn't blank and we're at the end of the list
-		if (!str.equals(prompt) && index == getChildren().size() - 1 && !isTitle) {
-			addInput(prompt, null);
+		if (getChildren().contains(inputBox)) {
+			String str = inputBox.getText().trim().equals("") ? prompt : inputBox.getText();
+			TextLine text = new TextLine(str, this);
+			int index = getChildren().indexOf(inputBox);
+			getChildren().set(index, text);
+			getChildren().remove(inputBox);
+			
+			//add another input if prev input wasn't blank and we're at the end of the list
+			if (!str.equals(prompt) && index == getChildren().size() - 1 && !isTitle) {
+				addInput(prompt, null);
+			}
 		}
-
 	}
 	
 	public void deselect() {
-		getChildren().remove(getChildren().size() - 1);
+			getChildren().remove(getChildren().size() - 1);
 	}
 	
 	public boolean isEmpty() {
@@ -58,5 +60,19 @@ public class Section extends VBox {
 			getChildren().add(placeholder);
 		}
 	}
-
+	
+	public void addLine(String s) {
+		TextLine text = new TextLine(s, this);
+		getChildren().add(text);
+	}
+	
+	public String serialize() {
+		String data="";
+		for (Node n : getChildren()) {
+			TextLine t = (TextLine) n;
+			data += t.getText() + "\n";
+		}
+		return data + "0\n";
+	}
+		
 }

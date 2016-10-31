@@ -14,7 +14,7 @@ public class Controller {
 
 	public Controller() {
 		toolbar = new ContextMenu(this);
-		menu = new FileMenu();
+		menu = new FileMenu(this);
 		workspace = new WorkSpace(this);
 		ui = new BorderPane();
 		
@@ -44,12 +44,23 @@ public class Controller {
 
 	public void deleteSelected() {
 		if (selectedBox != null) {
+			for (Relation r  : selectedBox.relations) {
+				if (r.endBox == selectedBox){
+					r.startBox.relations.remove(r);
+				}
+				else {
+					r.endBox.relations.remove(r);
+				}
+				workspace.getChildren().remove(r.text);
+				workspace.getChildren().remove(r);
+			}
 			workspace.getChildren().remove(selectedBox);
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
 			selectedBox = null;
 		}
 		if (selectedRelation != null) {
+			workspace.getChildren().remove(selectedRelation.text);
 			workspace.getChildren().remove(selectedRelation);
 			toolbar.hideDeleteButton();
 			toolbar.showAddBoxButton();
