@@ -16,12 +16,6 @@ public class Relation extends Line {
 	final int AGGREGATION = 1;
 	//...
 	private ImageView arrowHead;
-	
-	//for checking if line has changed since last update
-	private double lastStartX = 0;
-	private double lastStartY = 0;
-	private double lastEndX = 0;
-	private double lastEndY = 0;
 
 	public Relation(Box startBox, Controller c) {
 		this.controller = c;
@@ -83,13 +77,11 @@ public class Relation extends Line {
 		return arrowHead;
 	}
 	
+	//currently arrow heads can become mispositioned when boxes collapse and expand
+	//currently dragging an attached box or clicking in the workspace, sets the arrow heads to the correct position
 	public void update() {
-		if (lastStartX != getStartX() || lastStartY != getStartY() ||
-				lastEndX != getEndX() || lastEndY != getEndY()) {
-			updateArrowRotation();
-			updateArrowPosition();
-			setLastEndpoints();
-		}
+		updateArrowRotation();
+		updateArrowPosition();
 	}
 	
 	public void updateArrowRotation() {
@@ -100,6 +92,7 @@ public class Relation extends Line {
 		double angle = getLineAngle();
 		double halfBoxWidth = endBox.getWidth() / 2;
 		double halfBoxHeight = endBox.getHeight() / 2;
+		System.out.println(halfBoxHeight);
 		
 		//angle where line intersects corner of box
 		double criticalAngle = Math.toDegrees(Math.atan(endBox.getHeight() / endBox.getWidth()));
@@ -134,8 +127,8 @@ public class Relation extends Line {
 			yOffset = Math.abs(Math.tan(Math.toRadians(angle))) * halfBoxWidth;
 		}
 		
-		arrowHead.setX(this.getEndX() - (arrowHead.getImage().getWidth() / 2) + xOffset);
-		arrowHead.setY(this.getEndY() - (arrowHead.getImage().getHeight() /2) + yOffset);
+		arrowHead.setX(getEndX() - (arrowHead.getImage().getWidth() / 2) + xOffset);
+		arrowHead.setY(getEndY() - (arrowHead.getImage().getHeight() /2) + yOffset);
 	}
 	
 	public void setRelationType(int relationType) {
@@ -146,12 +139,13 @@ public class Relation extends Line {
 	}
 	
 	public void remove() {
-		controller.removeRelation(this);
 		controller.workspace.getChildren().remove(this);
 		controller.workspace.getChildren().remove(text);
 		controller.workspace.getChildren().remove(arrowHead);
 	}
 	
+	//angle between line and x-axis in degrees
+	//may seem upside down since (0,0) is in top left of pane
 	private double getLineAngle() {
 		//angle from startingBox to endingBox
 		double dx = getEndX() - getStartX();
@@ -167,12 +161,5 @@ public class Relation extends Line {
 			}
 		}
 		return angle;
-	}
-	
-	private void setLastEndpoints() {
-		lastStartX = getStartX();
-		lastStartY = getStartY();
-		lastEndX = getEndX();
-		lastEndY = getEndY();
 	}
 }
