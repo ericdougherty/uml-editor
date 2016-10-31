@@ -1,6 +1,5 @@
 import java.util.HashSet;
 import java.util.Set;
-
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -18,7 +17,7 @@ public class Controller {
 
 	public Controller() {
 		toolbar = new ContextMenu(this);
-		menu = new FileMenu();
+		menu = new FileMenu(this);
 		workspace = new WorkSpace(this);
 		ui = new BorderPane();
 		relations = new HashSet<Relation>();
@@ -49,6 +48,15 @@ public class Controller {
 
 	public void deleteSelected() {
 		if (selectedBox != null) {
+			for (Relation r  : selectedBox.relations) {
+				if (r.endBox == selectedBox){
+					r.startBox.relations.remove(r);
+				}
+				else {
+					r.endBox.relations.remove(r);
+				}
+				r.remove();
+			}
 			workspace.getChildren().remove(selectedBox);
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();

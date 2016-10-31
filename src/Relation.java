@@ -1,5 +1,3 @@
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,11 +6,10 @@ import javafx.scene.shape.*;
 
 public class Relation extends Line {
 
-	private Box startBox = null;
-	private Box endBox = null;
+	Box startBox = null;
+	Box endBox = null;
 	private Controller controller;
-	private Relation relation;
-	private Input text;
+	Input text;
 	
 	//relation types
 	final int GENERALIZATION = 0;
@@ -49,6 +46,9 @@ public class Relation extends Line {
 		// not necessarily a grid position
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
+		
+		startBox.addRelation(this);
+		endBox.addRelation(this);
 		
 		addText();
 		
