@@ -1,4 +1,3 @@
-import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 public class Section extends VBox {
@@ -47,7 +46,7 @@ public class Section extends VBox {
 	}
 	
 	public void deselect() {
-			getChildren().remove(getChildren().size() - 1);
+		getChildren().remove(getChildren().size() - 1);
 	}
 	
 	public boolean isEmpty() {
@@ -59,20 +58,6 @@ public class Section extends VBox {
 			TextLine placeholder = new TextLine(prompt, this);
 			getChildren().add(placeholder);
 		}
-	}
-	
-	public void addLine(String s) {
-		TextLine text = new TextLine(s, this);
-		getChildren().add(text);
-	}
-	
-	public String serialize() {
-		String data="";
-		for (Node n : getChildren()) {
-			TextLine t = (TextLine) n;
-			data += t.getText() + "\n";
-		}
-		return data + "0\n";
 	}
 		
 }
