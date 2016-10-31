@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -7,6 +9,7 @@ public class Box extends VBox {
 	Section[] sections = new Section[4];
 	Double coordX;
 	Double coordY;
+	ArrayList<Relation> relations = new ArrayList<Relation>();
 
 	public Box(Controller c) {
 		controller = c;
@@ -84,6 +87,7 @@ public class Box extends VBox {
 	}
 	
 	public void select() {
+		requestFocus();
 		for (Section s : sections){
 			s.select();
 			if (getChildren().indexOf(s) == -1) {
@@ -92,4 +96,8 @@ public class Box extends VBox {
 		}
 	}
 	
+	public void addRelation (Relation r) {
+		relations.add(r);
+	}
+
 }

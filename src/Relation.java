@@ -53,6 +53,9 @@ public class Relation extends Line {
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
 		
+		startBox.addRelation(this);
+		endBox.addRelation(this);
+		
 		addText();
 		
 		setRelationType(GENERALIZATION);
