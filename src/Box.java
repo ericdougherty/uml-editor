@@ -47,7 +47,7 @@ public class Box extends VBox {
 		setOnMouseReleased(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent arg0) {
-				controller.showGrid();			
+				controller.showGrid();
 			}
 		});
 		

@@ -52,6 +52,12 @@ public class Controller {
 			workspace.getChildren().remove(selectedBox);
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
+			//remove any relations attached to the box being removed
+			for (Relation r : relations) {
+				if (r.getEndingBox() == selectedBox || r.getStartingBox() == selectedBox) {
+					r.remove();
+				}
+			}
 			selectedBox = null;
 		}
 		if (selectedRelation != null) {
@@ -72,7 +78,6 @@ public class Controller {
 			selectedBox = null;
 			cancelCurrentRelation();
 		}
-		
 	}
 	
 	public void deselectRelation() {
