@@ -9,7 +9,8 @@ public class Relation extends Line {
 	private Box startBox = null;
 	private Box endBox = null;
 	private Controller controller;
-	private Input text;
+	private TextLine text;
+	private Input input = new Input(this);
 	
 	//relation types
 	final int GENERALIZATION = 0;
@@ -36,7 +37,7 @@ public class Relation extends Line {
 			}
 		});
 		
-		text = new Input();
+		text = new TextLine("add text here", this);
 		
 		arrowHead = new ImageView();
 	}
@@ -65,11 +66,12 @@ public class Relation extends Line {
 	
 	public void addText() {
 		controller.workspace.getChildren().add(text);
-		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.widthProperty())).divide(2));
-		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.heightProperty().multiply(2))).divide(2));
+		
+		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.xProperty())).divide(2));
+		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.yProperty().multiply(2))).divide(2));
 	}
 	
-	public Input getText() {
+	public TextLine getText() {
 		return text;
 	}
 	
@@ -162,4 +164,22 @@ public class Relation extends Line {
 		}
 		return angle;
 	}
+	
+	public void addInput(String s) {
+		input.setText(s);
+		controller.workspace.getChildren().remove(text);
+		controller.workspace.getChildren().add(input);
+		
+		input.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(input.widthProperty())).divide(2));
+		input.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(input.heightProperty().multiply(2))).divide(2));
+
+		input.requestFocus();
+	}
+	
+	public void processInput() {
+		text.setText(input.getText());
+		addText();
+		controller.workspace.getChildren().remove(input);
+	}
+
 }
