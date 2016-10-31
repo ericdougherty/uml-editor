@@ -52,11 +52,15 @@ public class Controller {
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
 			//remove any relations attached to the box being removed
+			Set<Relation> relationsToRemove = new HashSet<Relation>();
 			for (Relation r : relations) {
 				if (r.getEndBox() == selectedBox || r.getStartBox() == selectedBox) {
 					r.remove();
+					relationsToRemove.add(r);
 				}
 			}
+			relations.removeAll(relationsToRemove);
+			
 			selectedBox = null;
 		}
 		if (selectedRelation != null) {
@@ -68,7 +72,6 @@ public class Controller {
 	}
 	
 	public void deselectBox() {
-
 		if (selectedBox != null){
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
@@ -145,10 +148,6 @@ public class Controller {
 	
 	public void addRelation(Relation r) {
 		relations.add(r);
-	}
-	
-	public void removeRelation(Relation r) {
-		relations.remove(r);
 	}
 	
 	public void updateRelations() {
