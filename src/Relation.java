@@ -1,5 +1,3 @@
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,24 +6,16 @@ import javafx.scene.shape.*;
 
 public class Relation extends Line {
 
-<<<<<<< HEAD
-	Box startBox;
-	Box endBox;
-	Controller controller;
-	Input text;
-=======
-	private Box startBox = null;
-	private Box endBox = null;
+	Box startBox = null;
+	Box endBox = null;
 	private Controller controller;
-	private Relation relation;
-	private Input text;
+	Input text;
 	
 	//relation types
 	final int GENERALIZATION = 0;
 	final int AGGREGATION = 1;
 	//...
 	private ImageView arrowHead;
->>>>>>> refs/remotes/origin/master
 
 	public Relation(Box startBox, Controller c) {
 		this.controller = c;
@@ -51,25 +41,19 @@ public class Relation extends Line {
 		arrowHead = new ImageView();
 	}
 
-<<<<<<< HEAD
-	public void setEndPoint(Box b) {
-		endBox = b;
-=======
 	public void setEndPoint(Box endBox) {
 		this.endBox = endBox;
->>>>>>> refs/remotes/origin/master
 		// not necessarily a grid position
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
 		
-<<<<<<< HEAD
 		startBox.addRelation(this);
 		endBox.addRelation(this);
 		
 		controller.workspace.getChildren().add(text);
 		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.widthProperty())).divide(2));
 		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.heightProperty().multiply(2))).divide(2));
-=======
+		
 		addText();
 		
 		setRelationType(GENERALIZATION);
@@ -80,7 +64,6 @@ public class Relation extends Line {
 		arrowHead.layoutYProperty().bind(endYProperty().subtract(arrowHead.getImage().getHeight() / 2));
 		
 		updateArrowRotation();
->>>>>>> refs/remotes/origin/master
 	}
 
 	public Box getStartingBox() {

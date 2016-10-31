@@ -1,6 +1,5 @@
 import java.util.HashSet;
 import java.util.Set;
-
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -56,8 +55,7 @@ public class Controller {
 				else {
 					r.endBox.relations.remove(r);
 				}
-				workspace.getChildren().remove(r.text);
-				workspace.getChildren().remove(r);
+				r.remove();
 			}
 			workspace.getChildren().remove(selectedBox);
 			toolbar.hideDeleteButton();
@@ -65,12 +63,7 @@ public class Controller {
 			selectedBox = null;
 		}
 		if (selectedRelation != null) {
-<<<<<<< HEAD
-			workspace.getChildren().remove(selectedRelation.text);
-			workspace.getChildren().remove(selectedRelation);
-=======
 			selectedRelation.remove();
->>>>>>> refs/remotes/origin/master
 			toolbar.hideDeleteButton();
 			toolbar.showAddBoxButton();
 			selectedRelation = null;
