@@ -52,10 +52,6 @@ public class Relation extends Line {
 		// not necessarily a grid position
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
-		
-		startBox.addRelation(this);
-		endBox.addRelation(this);
-		
 		addText();
 		
 		setRelationType(GENERALIZATION);
@@ -65,11 +61,11 @@ public class Relation extends Line {
 		update();
 	}
 
-	public Box getStartingBox() {
+	public Box getStartBox() {
 		return startBox;
 	}
 	
-	public Box getEndingBox() {
+	public Box getEndBox() {
 		return endBox;
 	}
 	
