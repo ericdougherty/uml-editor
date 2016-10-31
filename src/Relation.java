@@ -36,12 +36,9 @@ public class Relation extends Line {
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
 		
-<<<<<<< HEAD
 		startBox.addRelation(this);
 		endBox.addRelation(this);
 		
-=======
->>>>>>> origin/erics-branch
 		controller.workspace.getChildren().add(text);
 		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.widthProperty())).divide(2));
 		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.heightProperty().multiply(2))).divide(2));
