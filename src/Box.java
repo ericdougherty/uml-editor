@@ -35,6 +35,7 @@ public class Box extends VBox {
 				double y = event.getSceneY() - coordY;
 				//round to nearest 20 px
 				relocate(Math.floorDiv((int) x, 20) * 20, Math.floorDiv((int) y, 20) * 20);
+				controller.updateRelations();
 			}
 		});
 		
