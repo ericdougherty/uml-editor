@@ -48,18 +48,15 @@ public class Controller {
 
 	public void deleteSelected() {
 		if (selectedBox != null) {
-			for (Relation r  : selectedBox.relations) {
-				if (r.endBox == selectedBox){
-					r.startBox.relations.remove(r);
-				}
-				else {
-					r.endBox.relations.remove(r);
-				}
-				r.remove();
-			}
 			workspace.getChildren().remove(selectedBox);
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
+			//remove any relations attached to the box being removed
+			for (Relation r : relations) {
+				if (r.getEndBox() == selectedBox || r.getStartBox() == selectedBox) {
+					r.remove();
+				}
+			}
 			selectedBox = null;
 		}
 		if (selectedRelation != null) {
@@ -80,7 +77,6 @@ public class Controller {
 			selectedBox = null;
 			cancelCurrentRelation();
 		}
-		
 	}
 	
 	public void deselectRelation() {
@@ -108,7 +104,7 @@ public class Controller {
 	public void endCurrentRelation(Box b) {
 		//only end relation if a box is selected
 		//and the ending box and starting box are different
-		if (b != null && !b.equals(currentRelation.getStartingBox())) {
+		if (b != null && !b.equals(currentRelation.getStartBox())) {
 			currentRelation.setEndPoint(b);
 			workspace.getChildren().add(currentRelation);
 			currentRelation.toBack();

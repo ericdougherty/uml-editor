@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -9,7 +7,6 @@ public class Box extends VBox {
 	Section[] sections = new Section[4];
 	Double coordX;
 	Double coordY;
-	ArrayList<Relation> relations = new ArrayList<Relation>();
 
 	public Box(Controller c) {
 		controller = c;
@@ -50,7 +47,7 @@ public class Box extends VBox {
 		setOnMouseReleased(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent arg0) {
-				controller.showGrid();			
+				controller.showGrid();
 			}
 		});
 		
@@ -95,9 +92,4 @@ public class Box extends VBox {
 			}
 		}
 	}
-	
-	public void addRelation (Relation r) {
-		relations.add(r);
-	}
-
 }

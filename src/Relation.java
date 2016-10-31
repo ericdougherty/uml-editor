@@ -6,16 +6,22 @@ import javafx.scene.shape.*;
 
 public class Relation extends Line {
 
-	Box startBox = null;
-	Box endBox = null;
+	private Box startBox = null;
+	private Box endBox = null;
 	private Controller controller;
-	Input text;
+	private Input text;
 	
 	//relation types
 	final int GENERALIZATION = 0;
 	final int AGGREGATION = 1;
 	//...
 	private ImageView arrowHead;
+	
+	//for checking if line has changed since last update
+	private double lastStartX = 0;
+	private double lastStartY = 0;
+	private double lastEndX = 0;
+	private double lastEndY = 0;
 
 	public Relation(Box startBox, Controller c) {
 		this.controller = c;
@@ -46,24 +52,21 @@ public class Relation extends Line {
 		// not necessarily a grid position
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
-		
-		startBox.addRelation(this);
-		endBox.addRelation(this);
-		
 		addText();
 		
 		setRelationType(GENERALIZATION);
 		controller.workspace.getChildren().add(arrowHead);
 		controller.addRelation(this);
 		
-		arrowHead.layoutXProperty().bind(endXProperty().subtract(arrowHead.getImage().getWidth() / 2));
-		arrowHead.layoutYProperty().bind(endYProperty().subtract(arrowHead.getImage().getHeight() / 2));
-		
-		updateArrowRotation();
+		update();
 	}
 
-	public Box getStartingBox() {
+	public Box getStartBox() {
 		return startBox;
+	}
+	
+	public Box getEndBox() {
+		return endBox;
 	}
 	
 	public void addText() {
@@ -81,24 +84,58 @@ public class Relation extends Line {
 	}
 	
 	public void update() {
-		updateArrowRotation();
+		if (lastStartX != getStartX() || lastStartY != getStartY() ||
+				lastEndX != getEndX() || lastEndY != getEndY()) {
+			updateArrowRotation();
+			updateArrowPosition();
+			setLastEndpoints();
+		}
 	}
 	
 	public void updateArrowRotation() {
-		double dx = endBox.getLayoutX() - startBox.getLayoutX();
-		double dy = endBox.getLayoutY() - startBox.getLayoutY();
-		double angle = Math.toDegrees(Math.atan(dy / dx));
+		arrowHead.setRotate(getLineAngle());
+	}
+	
+	public void updateArrowPosition() {
+		double angle = getLineAngle();
+		double halfBoxWidth = endBox.getWidth() / 2;
+		double halfBoxHeight = endBox.getHeight() / 2;
 		
-		//adjusting degrees to range from [-180, 180], instead of [-90, 90]
-		if (dx < 0) {
-			if (dy < 0) {
-				angle -= 180;
-			} else {
-				angle += 180;
-			}
+		//angle where line intersects corner of box
+		double criticalAngle = Math.toDegrees(Math.atan(endBox.getHeight() / endBox.getWidth()));
+		
+		double xOffset = 0;
+		double yOffset = 0;
+		
+		//calculate where line intersects outside of box
+		if (angle >= 0 && angle < criticalAngle) {
+			xOffset = -halfBoxWidth;
+			yOffset = -Math.abs(Math.tan(Math.toRadians(angle))) * halfBoxWidth;
+		} else if (angle >= criticalAngle && angle < 90) {
+			xOffset = -halfBoxHeight / Math.abs(Math.tan(Math.toRadians(angle)));
+			yOffset = -halfBoxHeight;
+		} else if (angle >= 90 && angle < 180 - criticalAngle) {
+			xOffset = halfBoxHeight / Math.abs(Math.tan(Math.toRadians(angle)));
+			yOffset = -halfBoxHeight;
+		} else if (angle >= 180 - criticalAngle && angle <= 180) {
+			xOffset = halfBoxWidth;
+			yOffset = -Math.abs(Math.tan(Math.toRadians(angle))) * halfBoxWidth;
+		} else if (angle >= -180 && angle < -180 + criticalAngle) {
+			xOffset = halfBoxWidth;
+			yOffset = Math.abs(Math.tan(Math.toRadians(angle))) * halfBoxWidth;
+		} else if (angle >= -180 + criticalAngle && angle < -90) {
+			xOffset = halfBoxHeight / Math.abs(Math.tan(Math.toRadians(angle)));
+			yOffset = halfBoxHeight;
+		} else if (angle >= -90 && angle < -criticalAngle) {
+			xOffset = -halfBoxHeight / Math.abs(Math.tan(Math.toRadians(angle)));
+			yOffset = halfBoxHeight;
+		} else if (angle >= -criticalAngle && angle < 0) {
+			xOffset = -halfBoxWidth;
+			yOffset = Math.abs(Math.tan(Math.toRadians(angle))) * halfBoxWidth;
 		}
 		
-		arrowHead.setRotate(angle);
+		arrowHead.setX(this.getEndX() - (arrowHead.getImage().getWidth() / 2) + xOffset);
+		arrowHead.setY(this.getEndY() - (arrowHead.getImage().getHeight() /2) + yOffset);
 	}
 	
 	public void setRelationType(int relationType) {
@@ -113,5 +150,29 @@ public class Relation extends Line {
 		controller.workspace.getChildren().remove(this);
 		controller.workspace.getChildren().remove(text);
 		controller.workspace.getChildren().remove(arrowHead);
+	}
+	
+	private double getLineAngle() {
+		//angle from startingBox to endingBox
+		double dx = getEndX() - getStartX();
+		double dy = getEndY() - getStartY();
+		double angle = Math.toDegrees(Math.atan(dy / dx));
+		
+		//adjusting degrees to range from [-180, 180], instead of [-90, 90]
+		if (dx < 0) {
+			if (dy < 0) {
+				angle -= 180;
+			} else {
+				angle += 180;
+			}
+		}
+		return angle;
+	}
+	
+	private void setLastEndpoints() {
+		lastStartX = getStartX();
+		lastStartY = getStartY();
+		lastEndX = getEndX();
+		lastEndY = getEndY();
 	}
 }
