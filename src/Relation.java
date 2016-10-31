@@ -50,10 +50,6 @@ public class Relation extends Line {
 		startBox.addRelation(this);
 		endBox.addRelation(this);
 		
-		controller.workspace.getChildren().add(text);
-		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.widthProperty())).divide(2));
-		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.heightProperty().multiply(2))).divide(2));
-		
 		addText();
 		
 		setRelationType(GENERALIZATION);
