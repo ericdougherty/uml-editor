@@ -9,7 +9,7 @@ public class Controller {
 	FileMenu menu;
 	WorkSpace workspace;
 	BorderPane ui;
-	Box selectedBox = null;
+	private Box selectedBox = null;
 	private Relation currentRelation = null;
 	private boolean addingRelation = false;
 	private Relation selectedRelation;
@@ -93,8 +93,13 @@ public class Controller {
 		
 	}
 	
-	public void showGrid() {
+	public void hideGrid() {
 		workspace.getStyleClass().add("noGrid");
+	}
+	
+	public void showGrid() {
+		workspace.getStyleClass().remove("noGrid");
+		workspace.getStyleClass().add("grid");
 	}
 	
 	public void startNewRelation() {
@@ -154,5 +159,9 @@ public class Controller {
 		for (Relation r : relations) {
 			r.update();
 		}
+	}
+	
+	public Box getSelectedBox() {
+		return selectedBox;
 	}
 }
