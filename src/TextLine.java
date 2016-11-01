@@ -38,8 +38,13 @@ public class TextLine extends Text {
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				if (relation == relation.getController().getSelectedRelation()) {
 					relation.addInput(thisLine.getText());
-					event.consume();
+				}
+				else {
+					relation.getController().selectRelation(relation);
+				}
+				event.consume();
 			}
 		});
 	}
