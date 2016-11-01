@@ -88,6 +88,7 @@ public class Controller {
 			toolbar.hideDeleteButton();
 			toolbar.showAddBoxButton();
 			selectedRelation.setStroke(Color.GRAY);
+			selectedRelation.hideText();
 			selectedRelation = null;
 		}
 		
@@ -143,6 +144,7 @@ public class Controller {
 			toolbar.hideAddBoxButton();
 			toolbar.hideAddRelationButton();
 			toolbar.showDeleteButton();
+			selectedRelation.showText();
 		} 
 		else if (selectedRelation != relation) {
 			selectedRelation.setStroke(null);
@@ -163,5 +165,9 @@ public class Controller {
 	
 	public Box getSelectedBox() {
 		return selectedBox;
+	}
+	
+	public Relation getSelectedRelation() {
+		return selectedRelation;
 	}
 }

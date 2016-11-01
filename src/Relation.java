@@ -47,12 +47,11 @@ public class Relation extends Line {
 		// not necessarily a grid position
 		endXProperty().bind(endBox.layoutXProperty().add(endBox.widthProperty().divide(2)));
 		endYProperty().bind(endBox.layoutYProperty().add(endBox.heightProperty().divide(2)));
-		addText();
 		
 		setRelationType(GENERALIZATION);
 		controller.workspace.getChildren().add(arrowHead);
 		controller.addRelation(this);
-		
+		addText();
 		update();
 	}
 
@@ -65,14 +64,43 @@ public class Relation extends Line {
 	}
 	
 	public void addText() {
-		controller.workspace.getChildren().add(text);
-		
-		text.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(text.xProperty())).divide(2));
-		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(text.yProperty().multiply(2))).divide(2));
+		text.layoutXProperty().bind(startXProperty().add(endXProperty()).divide(2));
+		text.layoutYProperty().bind(startYProperty().add(endYProperty()).divide(2));
+	}
+	
+	public void showText() {
+		if (!controller.workspace.getChildren().contains(text)) {
+			controller.workspace.getChildren().add(text);
+		}
+	}
+	
+	public void hideText() {
+		if (text.getText().equals("add text here") || text.getText().trim().equals("")) {
+			text.setText("add text here");
+			controller.workspace.getChildren().remove(text);
+		}
 	}
 	
 	public TextLine getText() {
 		return text;
+	}
+	
+	public void addInput(String s) {
+		input.setText(s);
+		controller.workspace.getChildren().remove(text);
+		controller.workspace.getChildren().add(input);
+		
+		input.layoutXProperty().bind(startXProperty().add(endXProperty()).divide(2));
+		input.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(input.heightProperty().multiply(2))).divide(2));
+
+		input.requestFocus();
+	}
+	
+	public void processInput() {
+		text.setText(input.getText());
+		controller.workspace.getChildren().remove(input);
+		showText();
+		hideText();
 	}
 	
 	public ImageView getArrowHead() {
@@ -165,21 +193,8 @@ public class Relation extends Line {
 		return angle;
 	}
 	
-	public void addInput(String s) {
-		input.setText(s);
-		controller.workspace.getChildren().remove(text);
-		controller.workspace.getChildren().add(input);
-		
-		input.layoutXProperty().bind(startXProperty().add(endXProperty().subtract(input.widthProperty())).divide(2));
-		input.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(input.heightProperty().multiply(2))).divide(2));
-
-		input.requestFocus();
-	}
-	
-	public void processInput() {
-		text.setText(input.getText());
-		addText();
-		controller.workspace.getChildren().remove(input);
+	public Controller getController() {
+		return controller;
 	}
 
 }
