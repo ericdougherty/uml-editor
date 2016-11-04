@@ -2,12 +2,22 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+/**
+ * Box Class
+ * Contains four Sections, can be connected by Relations
+ * -Has two states, selected and unselected, though this is tracked by controller, not individual boxes
+ */
 public class Box extends VBox {
 	Controller controller;
 	private Section[] sections = {new Section(this, "add class name", true), new Section(this, "add attribute", false), new Section(this, "add operation", false), new Section(this, "add miscellaneous", false)};
 	private Double offsetX;
 	private Double offsetY;
 
+	/**
+	 * Box constructor
+	 * Boxes are initialized with event handlers for mousedowns, click-and-drags, and clicks
+	 * @param c - the Controller
+	 */
 	public Box(Controller c) {
 		controller = c;
 		
@@ -17,6 +27,7 @@ public class Box extends VBox {
 		
 		getChildren().addAll(sections[0], sections[1], sections[2], sections[3]);
 		
+		//Enables click and drag of the boxes for movement
 		setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -29,6 +40,7 @@ public class Box extends VBox {
 			}
 		});
 		
+		//Tracks the position of the mouse with relation to the box
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -37,6 +49,7 @@ public class Box extends VBox {
 			}
 		});
 		
+		//Hides the grid when the box is not being moved
 		setOnMouseReleased(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -44,6 +57,7 @@ public class Box extends VBox {
 			}
 		});
 		
+		//Handles selectingthe box or adding relation lines on click
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {				
@@ -64,6 +78,10 @@ public class Box extends VBox {
 		controller.selectBox(this);
 	}
 	
+	/**
+	 * Called when the box is deselected
+	 * Handles setting the state of each section
+	 */
 	public void deselect() {
 		boolean okayToHide = true;
 		for (int i = 3; i >= 1; --i){
@@ -77,6 +95,10 @@ public class Box extends VBox {
 		}
 	}
 	
+	/**
+	 * Called when the box is selected
+	 * Handles setting the state of each section
+	 */
 	public void select() {
 		requestFocus();
 		for (Section s : sections){

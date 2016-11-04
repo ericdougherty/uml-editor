@@ -1,5 +1,8 @@
 import java.util.ArrayList;				//serializable object
 
+/**
+ * Initial work for future iteration - not implemented
+ */
 public class Model {
 	
 	private ArrayList<LineData> linelist = new ArrayList<>();

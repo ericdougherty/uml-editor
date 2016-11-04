@@ -2,11 +2,21 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
+/**
+ * TextLine Class
+ * Static text field used for Box Sections and Relation lines
+ * - TextLine elements that are children of selected Boxes or Relations lose visibility when clicked 
+ */
 public class TextLine extends Text {
 
 	Section parent;
 	Relation relation;
 
+	/**
+	 * TextLine constructor (used for Sections)
+	 * @param s - String that goes in this TextLine
+	 * @param p - Parent Section
+	 */
 	public TextLine(String s, Section p) {
 		super(s);
 		
@@ -16,6 +26,8 @@ public class TextLine extends Text {
 		//keeps box width from expanding
 		setWrappingWidth(141);
 
+
+		 //When clicked, create Input to replace this TextLine
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -27,6 +39,11 @@ public class TextLine extends Text {
 
 	}
 	
+	/**
+	 * TextLine constructor (used for Relations)
+	 * @param s - String that goes in this TextLine
+	 * @param r - Parent Relation
+	 */
 	public TextLine(String s, Relation r) {
 		super(s);
 		
@@ -35,6 +52,7 @@ public class TextLine extends Text {
 		
 		TextLine thisLine = this;
 		
+		//When clicked, create Input to replace this TextLine
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
