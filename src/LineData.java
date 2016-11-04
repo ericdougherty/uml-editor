@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * Initial work for future iteration - not implemented
+ */
 public class LineData {
 	
 	private double startx;

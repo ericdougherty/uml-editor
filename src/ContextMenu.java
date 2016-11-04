@@ -7,6 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Tooltip;
 
+/**
+ * ContextMenu Class
+ * Toolbar with buttons that change according to the currently selected object
+ * -Currently has three states - Box selected, Relation selected, nothing selected
+ */
 public class ContextMenu extends VBox {
 
 	Controller controller;
@@ -14,16 +19,19 @@ public class ContextMenu extends VBox {
 	Button addBox;
 	Button addRelation;
         
-        Image imageDelete = new Image(getClass().getResourceAsStream("/buttons/b_eras.png"));
-        Image imageBox = new Image(getClass().getResourceAsStream("/buttons/b_cbox.png"));
-        Image imageRelation = new Image(getClass().getResourceAsStream("/buttons/b_rela.png"));
-        Image imageAggrigation = new Image(getClass().getResourceAsStream("/buttons/b_aggr.png"));
-        Image imageComposion = new Image(getClass().getResourceAsStream("/buttons/b_comp.png"));
-        Image imageDependency = new Image(getClass().getResourceAsStream("/buttons/b_depe.png"));
-        Image imageGeneralization = new Image(getClass().getResourceAsStream("/buttons/b_gene.png"));
-        Image imageLine = new Image(getClass().getResourceAsStream("/buttons/b_line.png"));
-	//private int p;
+    Image imageDelete = new Image(getClass().getResourceAsStream("/buttons/b_eras.png"));
+    Image imageBox = new Image(getClass().getResourceAsStream("/buttons/b_cbox.png"));
+    Image imageRelation = new Image(getClass().getResourceAsStream("/buttons/b_rela.png"));
+    Image imageAggrigation = new Image(getClass().getResourceAsStream("/buttons/b_aggr.png"));
+    Image imageComposion = new Image(getClass().getResourceAsStream("/buttons/b_comp.png"));
+    Image imageDependency = new Image(getClass().getResourceAsStream("/buttons/b_depe.png"));
+    Image imageGeneralization = new Image(getClass().getResourceAsStream("/buttons/b_gene.png"));
+    Image imageLine = new Image(getClass().getResourceAsStream("/buttons/b_line.png"));
 
+    /**
+     * ContextMenu constructor
+     * @param c - the Controller
+     */
 	public ContextMenu(Controller c) {
 		controller = c;
 		
@@ -39,7 +47,6 @@ public class ContextMenu extends VBox {
 		getChildren().add(addBox);
 		getStyleClass().add("vbox");
 
-		//addBox button is always visible - should this go away when something is selected?
 		addBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -76,26 +83,44 @@ public class ContextMenu extends VBox {
                 addRelation.setTooltip(new Tooltip("Add a new Realtion"));
 	}
 
+	/**
+	 * Displays the delete button
+	 */
 	public void showDeleteButton() {
 		getChildren().add(delete);
 	}
 	
+	/**
+	 * Hides the delete button
+	 */
 	public void hideDeleteButton() {
 		getChildren().remove(delete);
 	}
 	
+	/**
+	 * Displays the add box button
+	 */
 	public void showAddBoxButton() {
 		getChildren().add(addBox);
 	}
 	
+	/**
+	 * Hides the add box button
+	 */
 	public void hideAddBoxButton() {
 		getChildren().remove(addBox);
 	}
 
+	/**
+	 * Displays the add relation button
+	 */
 	public void showAddRelationButton() {
 		getChildren().add(addRelation);
 	}
 	
+	/**
+	 * Hides the add relation button
+	 */
 	public void hideAddRelationButton() {
 		getChildren().remove(addRelation);
 	}
