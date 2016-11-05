@@ -1,4 +1,5 @@
 import javafx.scene.layout.VBox;
+
 /**
  * Section Class
  * Every class box is composed of 4 sections, each holds a series of TextLines
@@ -10,12 +11,13 @@ public class Section extends VBox {
 	Box parent;
 	String prompt;
 	boolean isTitle;
-    /**
-    * Section constructor
-    * @param b - Parent box
-    * @param s - Placeholder prompt that goes in an empty TextLine for this section
-    * @param t - Boolean value denoting if this section is a Title section
-    */
+
+	/**
+	* Section constructor
+	* @param b - Parent box
+	* @param s - Placeholder prompt that goes in an empty TextLine for this section
+	* @param t - Boolean value denoting if this section is a Title section
+	*/
 	public Section(Box b, String s, boolean t) {
 		parent = b;
 		prompt = s;
@@ -64,6 +66,7 @@ public class Section extends VBox {
 			}
 		}
 	}
+	
 	/**
 	 * Removes the placeholder TextLines
 	 */

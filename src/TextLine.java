@@ -26,7 +26,6 @@ public class TextLine extends Text {
 		//keeps box width from expanding
 		setWrappingWidth(141);
 
-
 		 //When clicked, create Input to replace this TextLine
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
