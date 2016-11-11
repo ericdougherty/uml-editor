@@ -1,6 +1,10 @@
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 
+/**
+ * FileMenu Class
+ * Currently just a visual placeholder - no functionality
+ */
 public class FileMenu extends MenuBar {
 	
 	Controller controller;

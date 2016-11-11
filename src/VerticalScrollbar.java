@@ -1,9 +1,11 @@
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ScrollBar;
 
+/**
+ * Initial work for future iteration - not implemented
+ */
 public class VerticalScrollbar extends ScrollBar{
 	
 	Controller controller;
