@@ -5,7 +5,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
 
 public class Relation extends Line {
-	/* Class Invariant:
+	/** Class Invariant:
     1. controller always refers to the same controller, and never is null after assignment
     2. arrowHead and endBox are never null after assignment
 	*/
@@ -17,11 +17,12 @@ public class Relation extends Line {
 	private Input input = new Input(this);
 	
 	//relation types
-	final int GENERALIZATION = 0;
-	final int AGGREGATION = 1;
+	static final int GENERALIZATION = 0;
+	static final int AGGREGATION = 1;
 	//...
 	
 	private ImageView arrowHead;
+	private ImageView secondArrowHead;
 	
 	/**
 	 * Assigns startBox and controller, to the passed parameters
@@ -74,7 +75,6 @@ public class Relation extends Line {
 		
 		setRelationType(GENERALIZATION);
 		controller.workspace.getChildren().add(arrowHead);
-		controller.addRelation(this);
 		addText();
 		update();
 	}
@@ -151,27 +151,36 @@ public class Relation extends Line {
 	}
 	
 	/**
-	 * Relations are to be properly positioned and rotated
+	 * arrow heads are to be properly positioned and rotated
 	 * Currently arrow heads can become incorrectly positioned when boxes collapse and expand
 	 * Currently dragging an attached box or clicking in the workspace, sets the arrow heads to the correct position
 	 */
 	public void update() {
-		updateArrowRotation();
-		updateArrowPosition();
+		updateArrowPosition(arrowHead, startBox, endBox);
+		updateArrowRotation(arrowHead, startBox, endBox);
+		if (!isSingleEnded()) {
+			updateArrowPosition(secondArrowHead, endBox, startBox);
+			updateArrowRotation(secondArrowHead, endBox, startBox);
+		}
+		
 	}
 	
 	/**
 	 * Arrow head rotation is updated to match that of the line
 	 */
-	public void updateArrowRotation() {
-		arrowHead.setRotate(getLineAngle());
+	public void updateArrowRotation(ImageView arrowHead, Box startBox, Box endBox) {
+		arrowHead.setRotate(getLineAngle(startBox, endBox));
 	}
 	
 	/**
 	 * Arrow head is positioned to be where this relation and the end box intersect
+	 * startBox and endBox can be passed in reverse order to apply the arrow head to the startBox instance variable
+	 * @param arrowHead - which arrowHead to position
+	 * @param startBox
+	 * @param endBox
 	 */
-	public void updateArrowPosition() {
-		double angle = getLineAngle();
+	public void updateArrowPosition(ImageView arrowHead, Box startBox, Box endBox) {
+		double angle = getLineAngle(startBox, endBox);
 		double halfBoxWidth = endBox.getWidth() / 2;
 		double halfBoxHeight = endBox.getHeight() / 2;
 		
@@ -214,20 +223,25 @@ public class Relation extends Line {
 		}
 		
 		//sets middle of arrow head to edge of box using offsets
-		arrowHead.setX(getEndX() - (arrowHead.getImage().getWidth() / 2) + xOffset);
-		arrowHead.setY(getEndY() - (arrowHead.getImage().getHeight() /2) + yOffset);
+		arrowHead.setX(endBox.getLayoutX() + (endBox.getWidth() / 2) - (arrowHead.getImage().getWidth() / 2) + xOffset);
+		arrowHead.setY(endBox.getLayoutY() + (endBox.getHeight() / 2) - (arrowHead.getImage().getHeight() /2) + yOffset);
 	}
 	
 	/**
 	 * Arrow heads are set based on type of relation desired
 	 * Currently only contains implementation for generalization
+	 * secondArrowHead is updated if the relation is double ended
 	 * @param relationType - determines type of arrow head
 	 */
 	public void setRelationType(int relationType) {
 		if (relationType == GENERALIZATION) {
-			arrowHead.setImage(new Image("/generalization.png", false));
+			arrowHead.setImage(new Image("/ui elements/gen.png", false));
 		}
 		//...
+		
+		if (!isSingleEnded()) {
+			secondArrowHead.setImage(arrowHead.getImage());
+		}
 	}
 	
 	/**
@@ -237,18 +251,19 @@ public class Relation extends Line {
 		controller.workspace.getChildren().remove(this);
 		controller.workspace.getChildren().remove(text);
 		controller.workspace.getChildren().remove(arrowHead);
+		controller.workspace.getChildren().remove(secondArrowHead);
 	}
 	
 	/**
-	 * Angle between line and x-axis in degrees
+	 * Angle between line and x-axis through startBox in degrees
 	 * Calculated as though startX and startY = 0
 	 * Easiest to think about when moving the endBox in a circle around the startBox
-	 * @return angle between line and x-axis in degrees
+	 * @return angle between line and x-axis through startBox in degrees
 	 */
-	private double getLineAngle() {
+	private double getLineAngle(Box startBox, Box endBox) {
 		//angle from startingBox to endingBox
-		double dx = getEndX() - getStartX();
-		double dy = getEndY() - getStartY();
+		double dx = (endBox.getLayoutX() + (endBox.getWidth() / 2)) - (startBox.getLayoutX() + (startBox.getWidth() / 2));
+		double dy = (endBox.getLayoutY() + (endBox.getHeight() / 2)) - (startBox.getLayoutY() + (startBox.getHeight() / 2));
 		double angle = Math.toDegrees(Math.atan(dy / dx));
 		
 		//adjusting degrees to range from [-180, 180], instead of [-90, 90]
@@ -262,8 +277,45 @@ public class Relation extends Line {
 		return angle;
 	}
 	
+	/**
+	 * @return reference to controller
+	 */
 	public Controller getController() {
 		return controller;
+	}
+	
+	/**
+	 * swap assignments of startBox and endBox
+	 */
+	public void flip() {
+		Box temp = startBox;
+		startBox = endBox;
+		endBox = temp;
+		update();
+	}
+	
+	/*
+	 * remove secondArrowHead
+	 */
+	public void setSingleEnded() {
+		controller.workspace.getChildren().remove(secondArrowHead);
+		secondArrowHead = null;
+		update();
+	}
+	
+	/**
+	 * secondArrowHead is added and its type matches that of arrowHead
+	 */
+	public void setDoubleEnded() {
+		if (secondArrowHead == null) {
+			secondArrowHead = new ImageView(arrowHead.getImage());
+			controller.workspace.getChildren().add(secondArrowHead);
+			update();
+		}
+	}
+	
+	public boolean isSingleEnded() {
+		return secondArrowHead == null;
 	}
 
 }

@@ -1,7 +1,6 @@
 import java.util.HashSet;
 import java.util.Set;
 
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -92,6 +91,7 @@ public class Controller {
 		if (selectedRelation != null) {
 			selectedRelation.remove();
 			toolbar.hideDeleteButton();
+			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
 			selectedRelation = null;
 		}
@@ -115,15 +115,14 @@ public class Controller {
 	 * Deselects the currently selected relation if there is one
 	 */
 	public void deselectRelation() {
-		
 		if (selectedRelation != null){
 			toolbar.hideDeleteButton();
+			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
 			selectedRelation.setStroke(Color.GRAY);
 			selectedRelation.hideText();
 			selectedRelation = null;
 		}
-		
 	}
 	
 	/**
@@ -161,7 +160,7 @@ public class Controller {
 		//and the ending box and starting box are different
 		if (b != null && !b.equals(currentRelation.getStartBox())) {
 			currentRelation.setEndPoint(b);
-			workspace.getChildren().add(currentRelation);
+			addRelation(currentRelation);
 			currentRelation.toBack();
 			currentRelation = null;
 			addingRelation = false;
@@ -203,10 +202,9 @@ public class Controller {
 			selectedRelation.setStroke(Color.WHITE);
 			toolbar.hideAddBoxButton();
 			toolbar.hideAddRelationButton();
+			toolbar.showEditRelationButtons();
 			toolbar.showDeleteButton();
-			selectedRelation.showText();
-		} 
-		else if (selectedRelation != relation) {
+		} else if (selectedRelation != relation) {
 			selectedRelation.setStroke(null);
 			selectedRelation = relation;
 			selectedRelation.setStroke(Color.WHITE);
@@ -214,13 +212,36 @@ public class Controller {
 	}
 	
 	/**
-	 * Adds a Relation to the set
-	 * @param r - the Relation to be added
+	 * Adds a relation to the set and workspace
+	 * @param r - the relation to be added
 	 */
 	public void addRelation(Relation r) {
 		relations.add(r);
+		workspace.getChildren().add(r);
 	}
 	
+	public void flipCurrentRelation() {
+		if (selectedRelation != null) {
+			selectedRelation.flip();
+		}
+	}
+	
+	public void setCurrentRelationSingleEnded() {
+		if (selectedRelation != null) {
+			selectedRelation.setSingleEnded();
+		}
+	}
+	
+	public void setCurrentRelationDoubleEnded() {
+		if (selectedRelation != null) {
+			selectedRelation.setDoubleEnded();
+		}
+	}
+	
+	/**
+	 * Adds a box to the set and workspace
+	 * @param b- the box to be added
+	 */
 	public void addBox(Box b) {
 		boxes.add(b);
 		workspace.getChildren().add(b);

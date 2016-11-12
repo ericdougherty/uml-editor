@@ -1,5 +1,7 @@
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import static org.junit.Assert.assertTrue;
@@ -7,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class Testing {
+	//event for fireing click events on ImageViews
+	MouseEvent mouseClickEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 0, false, false, false, false, false, false, false, false, false, false, null);
 	
 	@Test
 	public void testBoxes() throws InterruptedException {
@@ -27,16 +31,16 @@ public class Testing {
 		Thread.sleep(1000); // Time to use the app, with out this, the thread will be killed before you can tell.
 
 		Controller c = new Controller();
-		c.toolbar.addBox.fire();
+		c.toolbar.addBox.fireEvent(mouseClickEvent);
 		assertTrue ("Box not added", c.workspace.getChildren().size() == 1);
 		Box box = (Box) c.workspace.getChildren().get(0);
 		c.selectBox(box);
 		assertTrue ("Box not selected", c.getSelectedBox() == box);
-		c.toolbar.delete.fire();
+		c.toolbar.delete.fireEvent(mouseClickEvent);
 		assertTrue ("Workspace not empty", c.workspace.getChildren().size() == 0);
 		
 		for (int i = 0; i < 10; ++i) {
-			c.toolbar.addBox.fire();
+			c.toolbar.addBox.fireEvent(mouseClickEvent);
 		}
 		assertTrue("Should be 10 boxes in workspace", c.workspace.getChildren().size() == 10);
 		
@@ -69,11 +73,11 @@ public class Testing {
 				Thread.sleep(1000); // Time to use the app, with out this, the thread will be killed before you can tell.
 
 		Controller c = new Controller();
-		c.toolbar.addBox.fire();
+		c.toolbar.addBox.fireEvent(mouseClickEvent);
 		Box boxA = c.getSelectedBox();
-		c.toolbar.addBox.fire();
+		c.toolbar.addBox.fireEvent(mouseClickEvent);
 		Box boxB = c.getSelectedBox();
-		c.toolbar.addBox.fire();
+		c.toolbar.addBox.fireEvent(mouseClickEvent);
 		Box boxC = c.getSelectedBox();
 		
 		assertTrue("Should be 3 elements in the workspace", c.workspace.getChildren().size() == 3);
@@ -81,7 +85,7 @@ public class Testing {
 		assertTrue("Should have three unique boxes", (boxA != boxB) && (boxB != boxC) && (boxA != boxC));
 		assertTrue("boxC should be selected", c.getSelectedBox() == boxC);
 		
-		c.toolbar.addRelation.fire();
+		c.toolbar.addRelation.fireEvent(mouseClickEvent);
 		assertTrue("addingRelation should be true", c.isAddingRelation());
 		c.endCurrentRelation(boxB);
 		
@@ -130,15 +134,15 @@ public class Testing {
 		
 		assertTrue("Only one button should be showing", c.toolbar.getChildren().size() == 1);
 		assertTrue("Button should be delete", c.toolbar.getChildren().get(0) == c.toolbar.addBox);
-		c.toolbar.addBox.fire();
+		c.toolbar.addBox.fireEvent(mouseClickEvent);
 		Box boxA = c.getSelectedBox();
-		c.toolbar.addBox.fire();
+		c.toolbar.addBox.fireEvent(mouseClickEvent);
 		Box boxB = c.getSelectedBox();
 
 		assertTrue("boxB should be selected", c.getSelectedBox() == boxB);
 		assertTrue("Three buttons should be showing", c.toolbar.getChildren().size() == 3);
 		
-		c.toolbar.addRelation.fire();
+		c.toolbar.addRelation.fireEvent(mouseClickEvent);
 		c.endCurrentRelation(boxA);
 		Relation r = c.getRelations().iterator().next();
 		c.selectRelation(r);
