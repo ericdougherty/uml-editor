@@ -75,6 +75,7 @@ public class Box extends VBox {
 		});
 		
 		//created box starts selected
+		controller.addBox(this);
 		controller.selectBox(this);
 	}
 	
