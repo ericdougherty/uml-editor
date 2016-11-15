@@ -31,6 +31,7 @@ public class WorkSpace extends Pane{
 				controller.deselectBox();
 				//Temporary: clicking in workspace will fix all mispositioned arrowheads
 				controller.updateRelations();
+				controller.toolbar.setAddRelationShadow(false);
 			}
 		});
 	}

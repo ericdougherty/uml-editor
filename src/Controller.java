@@ -1,5 +1,6 @@
 import java.util.HashSet;
 import java.util.Set;
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -22,6 +23,7 @@ public class Controller {
 	private Relation currentRelation;
 	private boolean addingRelation;
 	private Relation selectedRelation;
+	private Set<Box> boxes;
 	private Set<Relation> relations;
 
 	/**
@@ -33,6 +35,7 @@ public class Controller {
 		menu = new FileMenu(this);
 		workspace = new WorkSpace(this);
 		ui = new BorderPane();
+		boxes = new HashSet<Box>();
 		relations = new HashSet<Relation>();
 		
 		ui.setLeft(toolbar);
@@ -48,19 +51,20 @@ public class Controller {
 		
 		deselectRelation();
 		
-		if (selectedBox == null) {
-			selectedBox = box;
-			toolbar.showAddRelationButton();
-			toolbar.showDeleteButton();
-			selectedBox.getStyleClass().add("box-shadow");
-			selectedBox.select();
-		} 
-		else if (box != selectedBox) {
+		if (selectedBox != null && box != selectedBox) {
 			selectedBox.getStyleClass().remove("box-shadow");
-			selectedBox = box;
-			selectedBox.getStyleClass().add("box-shadow");
-			selectedBox.select();
 		}
+		selectedBox = box;
+		selectedBox.getStyleClass().add("box-shadow");
+		selectedBox.select();
+		
+		//remove buttons and re-add (addRelation only if there are more than one box)
+		toolbar.hideDeleteButton();
+		toolbar.hideAddRelationButton();
+		if (boxes.size() > 1) {
+			toolbar.showAddRelationButton();
+		}
+		toolbar.showDeleteButton();
 	}
 
 	/**
@@ -69,6 +73,7 @@ public class Controller {
 	public void deleteSelected() {
 		if (selectedBox != null) {
 			workspace.getChildren().remove(selectedBox);
+			boxes.remove(selectedBox);
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
 			//remove any relations attached to the box being removed
@@ -86,6 +91,7 @@ public class Controller {
 		if (selectedRelation != null) {
 			selectedRelation.remove();
 			toolbar.hideDeleteButton();
+			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
 			selectedRelation = null;
 		}
@@ -109,15 +115,14 @@ public class Controller {
 	 * Deselects the currently selected relation if there is one
 	 */
 	public void deselectRelation() {
-		
 		if (selectedRelation != null){
 			toolbar.hideDeleteButton();
+			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
 			selectedRelation.setStroke(Color.GRAY);
 			selectedRelation.hideText();
 			selectedRelation = null;
 		}
-		
 	}
 	
 	/**
@@ -142,11 +147,12 @@ public class Controller {
 		if (selectedBox != null) {
 			addingRelation = true;
 			currentRelation = new Relation(selectedBox, this);
+			toolbar.setAddRelationShadow(true);
 		}
 	}
 	
 	/**
-	 * Completes a new Relation line
+	 * Completes a new Relation line, or cancels if an invalid endpoint is passed
 	 * @param b - the endpoint box for the line
 	 */
 	public void endCurrentRelation(Box b) {
@@ -154,10 +160,11 @@ public class Controller {
 		//and the ending box and starting box are different
 		if (b != null && !b.equals(currentRelation.getStartBox())) {
 			currentRelation.setEndPoint(b);
-			workspace.getChildren().add(currentRelation);
+			addRelation(currentRelation);
 			currentRelation.toBack();
 			currentRelation = null;
 			addingRelation = false;
+			toolbar.setAddRelationShadow(false);
 		} else {
 			//invalid ending box
 			cancelCurrentRelation();
@@ -179,6 +186,7 @@ public class Controller {
 	public void cancelCurrentRelation() {
 		addingRelation = false;
 		currentRelation = null;
+		toolbar.setAddRelationShadow(false);
 	}
 
 	/**
@@ -194,10 +202,9 @@ public class Controller {
 			selectedRelation.setStroke(Color.WHITE);
 			toolbar.hideAddBoxButton();
 			toolbar.hideAddRelationButton();
+			toolbar.showEditRelationButtons();
 			toolbar.showDeleteButton();
-			selectedRelation.showText();
-		} 
-		else if (selectedRelation != relation) {
+		} else if (selectedRelation != relation) {
 			selectedRelation.setStroke(null);
 			selectedRelation = relation;
 			selectedRelation.setStroke(Color.WHITE);
@@ -205,11 +212,39 @@ public class Controller {
 	}
 	
 	/**
-	 * Adds a Relation to the set
-	 * @param r - the Relation to be added
+	 * Adds a relation to the set and workspace
+	 * @param r - the relation to be added
 	 */
 	public void addRelation(Relation r) {
 		relations.add(r);
+		workspace.getChildren().add(r);
+	}
+	
+	public void flipCurrentRelation() {
+		if (selectedRelation != null) {
+			selectedRelation.flip();
+		}
+	}
+	
+	public void setCurrentRelationSingleEnded() {
+		if (selectedRelation != null) {
+			selectedRelation.setSingleEnded();
+		}
+	}
+	
+	public void setCurrentRelationDoubleEnded() {
+		if (selectedRelation != null) {
+			selectedRelation.setDoubleEnded();
+		}
+	}
+	
+	/**
+	 * Adds a box to the set and workspace
+	 * @param b- the box to be added
+	 */
+	public void addBox(Box b) {
+		boxes.add(b);
+		workspace.getChildren().add(b);
 	}
 	
 	/**
