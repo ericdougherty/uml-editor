@@ -18,6 +18,7 @@ public class Controller {
 	ContextMenu toolbar;
 	FileMenu menu;
 	WorkSpace workspace;
+	ScrollBars scrollpane;
 	BorderPane ui;
 	private Box selectedBox;
 	private Relation currentRelation;
@@ -34,13 +35,15 @@ public class Controller {
 		toolbar = new ContextMenu(this);
 		menu = new FileMenu(this);
 		workspace = new WorkSpace(this);
+		scrollpane = new ScrollBars(this);
+		scrollpane.getStyleClass().add("scroll-pane");
 		ui = new BorderPane();
 		boxes = new HashSet<Box>();
 		relations = new HashSet<Relation>();
 		
 		ui.setLeft(toolbar);
 		ui.setTop(menu);
-		ui.setCenter(workspace);
+		ui.setCenter(scrollpane);
 	}
 	
 	/**
