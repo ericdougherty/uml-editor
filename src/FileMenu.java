@@ -6,10 +6,18 @@ import javafx.event.ActionEvent;
 
 
 
+/**
+ * FileMenu Class
+ * Currently just a visual placeholder - no functionality
+ */
 public class FileMenu extends MenuBar {
 	
-	public FileMenu(){
+	Controller controller;
+        
+	public FileMenu(Controller c){
 		
+                controller = c;
+
 		final Menu menuItem1 = new Menu("File");		
 		final Menu menuItem2 = new Menu("Preferences");
 		final Menu menuItem3 = new Menu("Help");
@@ -24,6 +32,7 @@ public class FileMenu extends MenuBar {
                 
 		getMenus().addAll(menuItem1, menuItem2, menuItem3);
                 menuItem1.getItems().addAll(exit);
+
 		getStyleClass().add("menu");
                 
                 

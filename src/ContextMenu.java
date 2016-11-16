@@ -1,29 +1,40 @@
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 
+/**
+ * ContextMenu Class
+ * Toolbar with buttons that change according to the currently selected object
+ * -Currently has three states - Box selected, Relation selected, nothing selected
+ */
 public class ContextMenu extends VBox {
 
 	Controller controller;
-	Button delete;
-	Button addBox;
-	Button addRelation;
-        
-        Image imageDelete = new Image(getClass().getResourceAsStream("/buttons/b_eras.png"));
-        Image imageBox = new Image(getClass().getResourceAsStream("/buttons/b_cbox.png"));
-        Image imageRelation = new Image(getClass().getResourceAsStream("/buttons/b_rela.png"));
-        Image imageAggrigation = new Image(getClass().getResourceAsStream("/buttons/b_aggr.png"));
-        Image imageComposion = new Image(getClass().getResourceAsStream("/buttons/b_comp.png"));
-        Image imageDependency = new Image(getClass().getResourceAsStream("/buttons/b_depe.png"));
-        Image imageGeneralization = new Image(getClass().getResourceAsStream("/buttons/b_gene.png"));
-        Image imageLine = new Image(getClass().getResourceAsStream("/buttons/b_line.png"));
-	//private int p;
+	
+	ImageView delete = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/delete.png"), 60, 60, true, true));
+	ImageView addBox = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/addBox.png"), 60, 60, true, true));
+	ImageView addRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/addRelation.png"), 60, 60, true, true));
+	ImageView flipRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/flipRelation.png"), 60, 60, true, true));
+	ImageView singleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/singleRelation.png"), 60, 60, true, true));
+	ImageView doubleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/doubleRelation.png"), 60, 60, true, true));
+    
+    ImageView aggrigation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/aggregation.png"), 60, 60, true, true));
+    ImageView composion = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/composition.png"), 60, 60, true, true));
+    ImageView dependency = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/association.png"), 60, 60, true, true));
+    ImageView generalization = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/generalization.png"), 60, 60, true, true));
+    ImageView solidLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/solidLine.png"), 60, 60, true, true));
+    ImageView dottedLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/dottedLine.png"), 60, 60, true, true));
 
+    /**
+     * ContextMenu constructor
+     * @param c - the Controller
+     */
 	public ContextMenu(Controller c) {
 		controller = c;
 		
@@ -31,73 +42,149 @@ public class ContextMenu extends VBox {
 		setSpacing(10);
 		setPadding(new Insets(20, 10, 10, 10));
 		//preferred width - need to unify button widths and this won't be an issue
-		setPrefWidth(105);
-
-		addBox = new Button();
-		addRelation = new Button();
-		delete = new Button();
+		setPrefWidth(80);
+		
+		Tooltip.install(addBox, new Tooltip("Add Class Box"));
+		Tooltip.install(addRelation, new Tooltip("Add Relation"));
+		Tooltip.install(delete, new Tooltip("Delete"));
+		Tooltip.install(flipRelation, new Tooltip("Flip Relation"));
+		Tooltip.install(singleRelation, new Tooltip("Make Relation Single Ended"));
+		Tooltip.install(doubleRelation, new Tooltip("Make Relation Double Ended"));
+		
 		getChildren().add(addBox);
 		getStyleClass().add("vbox");
 
-		//addBox button is always visible - should this go away when something is selected?
-		addBox.setOnAction(new EventHandler<ActionEvent>() {
+		addBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(MouseEvent arg0) {
 				controller.deselectBox();
 				Box rect = new Box(controller);
-				controller.workspace.getChildren().add(rect);
 				controller.cancelCurrentRelation();
 			}
 		});
-                
-                addBox.setGraphic(new ImageView(imageBox));
-                addBox.setTooltip(new Tooltip("New Class Box"));
-
-		delete.setOnAction(new EventHandler<ActionEvent>() {
+		
+        delete.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(MouseEvent arg0) {
 				controller.deleteSelected();
 				controller.cancelCurrentRelation();
 			}
 		});
-                
-                delete.setGraphic(new ImageView(imageDelete));
-                delete.setTooltip(new Tooltip("Delete"));
 
 		//only available when a box is selected
-		addRelation.setOnAction(new EventHandler<ActionEvent>() {
+		addRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(MouseEvent arg0) {
 				controller.startNewRelation();
 			}
 		});
-                
-                addRelation.setGraphic(new ImageView(imageRelation));
-                addRelation.setTooltip(new Tooltip("Add a new Realtion"));
+
+		//only available when a relation is selected and single ended
+		flipRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				controller.flipCurrentRelation();
+			}
+		});
+
+		//only available when a relation is selected and double ended
+		singleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				controller.setCurrentRelationSingleEnded();
+				hideEditRelationButtons();
+				hideDeleteButton();
+				showEditRelationButtons();
+				showDeleteButton();
+			}
+		});
+
+		//only available when a relation is selected  and single ended
+		doubleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				controller.setCurrentRelationDoubleEnded();
+				hideEditRelationButtons();
+				hideDeleteButton();
+				showEditRelationButtons();
+				showDeleteButton();
+			}
+		});
 	}
 
+	/**
+	 * Displays the delete button
+	 */
 	public void showDeleteButton() {
 		getChildren().add(delete);
 	}
 	
+	/**
+	 * Hides the delete button
+	 */
 	public void hideDeleteButton() {
 		getChildren().remove(delete);
 	}
 	
+	/**
+	 * Displays the add box button
+	 */
 	public void showAddBoxButton() {
 		getChildren().add(addBox);
 	}
 	
+	/**
+	 * Hides the add box button
+	 */
 	public void hideAddBoxButton() {
 		getChildren().remove(addBox);
 	}
 
+	/**
+	 * Displays the add relation button
+	 */
 	public void showAddRelationButton() {
 		getChildren().add(addRelation);
 	}
 	
+	/**
+	 * Hides the add relation button
+	 */
 	public void hideAddRelationButton() {
 		getChildren().remove(addRelation);
+	}
+
+	/**
+	 * Displays the appropriate edit relation button
+	 */
+	public void showEditRelationButtons() {
+		if (controller.getSelectedRelation().isSingleEnded()) {
+			getChildren().add(doubleRelation);
+			getChildren().add(flipRelation);
+		} else {
+			getChildren().add(singleRelation);
+		}
+	}
+	
+	/**
+	 * Hides the appropriate edit relation button
+	 */
+	public void hideEditRelationButtons() {
+		getChildren().remove(flipRelation);
+		getChildren().remove(singleRelation);
+		getChildren().remove(doubleRelation);
+	}
+	
+	/**
+	 * applies a shadow or removes a shadow from the addRelation button
+	 * @param b - boolean for whether a shadow should be applied or removed
+	 */
+	public void setAddRelationShadow(boolean b) {
+		if (b) {
+			addRelation.setEffect(new DropShadow(20, Color.LIGHTGREY));
+		} else {
+			addRelation.setEffect(null);
+		}
 	}
 
 }

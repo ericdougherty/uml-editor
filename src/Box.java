@@ -2,12 +2,24 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+/**
+ * Box Class
+ * Contains four Sections, can be connected by Relations
+ * -Has two states, selected and unselected, though this is tracked by controller, not individual boxes
+ */
 public class Box extends VBox {
 	Controller controller;
-	Section[] sections = new Section[4];
-	Double coordX;
-	Double coordY;
+	private Section[] sections = {new Section(this, "add class name", true), new Section(this, "add attribute", false), new Section(this, "add operation", false), new Section(this, "add miscellaneous", false)};
+	private Double offsetX;
+	private Double offsetY;
+	int previousx = 0;
+	int previousy = 0;
 
+	/**
+	 * Box constructor
+	 * Boxes are initialized with event handlers for mousedowns, click-and-drags, and clicks
+	 * @param c - the Controller
+	 */
 	public Box(Controller c) {
 		controller = c;
 		
@@ -15,41 +27,53 @@ public class Box extends VBox {
 		Box thisBox = this;
 		setPrefWidth(141);
 		
-		sections[0] = new Section(this, "add class name", true);
-		sections[1] = new Section(this, "add attribute", false);
-		sections[2] = new Section(this, "add operation", false);
-		sections[3] = new Section(this, "add miscellaneous", false);
-		
 		getChildren().addAll(sections[0], sections[1], sections[2], sections[3]);
 		
+		//Enables click and drag of the boxes for movement
 		setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				//css style to show grid while rectangle is being dragged - should be call to controller like below on setOnMouseReleased
-				controller.workspace.getStyleClass().remove("noGrid");
-				controller.workspace.getStyleClass().add("grid");
-				double x = event.getSceneX() - coordX;
-				double y = event.getSceneY() - coordY;
+				controller.showGrid();
+				double x = event.getSceneX() - offsetX;
+				double y = event.getSceneY() - offsetY;
+				if ((x < 0) || (y < 0)) {
+					x = previousx;
+					y = previousy;
+				}
+				if ((x + thisBox.getWidth()) > controller.workspace.getWidth() && (x > 1300)) {
+					controller.workspace.setMinWidth(x);
+			        controller.scrollpane.setHvalue(controller.scrollpane.getHmax()); 
+				}
+				if ((y + thisBox.getHeight()) > controller.workspace.getHeight() && (y > 700)) {
+					controller.workspace.setMinHeight(y);
+			        controller.scrollpane.setVvalue(controller.scrollpane.getVmax()); 
+				}
+				previousx = Math.floorDiv((int) x, 20) * 20;
+				previousy = Math.floorDiv((int) y, 20) * 20;
 				//round to nearest 20 px
 				relocate(Math.floorDiv((int) x, 20) * 20, Math.floorDiv((int) y, 20) * 20);
+				controller.updateRelations();
 			}
 		});
 		
+		//Tracks the position of the mouse with relation to the box
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				coordX = event.getSceneX() - getLayoutX();
-				coordY = event.getSceneY() - getLayoutY();
+				offsetX = event.getSceneX() - getLayoutX();
+				offsetY = event.getSceneY() - getLayoutY();
 			}
 		});
 		
+		//Hides the grid when the box is not being moved
 		setOnMouseReleased(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent arg0) {
-				controller.showGrid();			
+				controller.hideGrid();
 			}
 		});
 		
+		//Handles selectingthe box or adding relation lines on click
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {				
@@ -57,7 +81,7 @@ public class Box extends VBox {
 				if (controller.isAddingRelation()) {
 					controller.endCurrentRelation(thisBox);
 				}
-				else if (thisBox != controller.selectedBox) {
+				else if (thisBox != controller.getSelectedBox()) {
 					controller.deselectBox();
 					controller.selectBox(thisBox);
 				}
@@ -66,14 +90,20 @@ public class Box extends VBox {
 			}
 		});
 		
+		//created box starts selected
+		controller.addBox(this);
 		controller.selectBox(this);
 	}
 	
+	/**
+	 * Called when the box is deselected
+	 * Handles setting the state of each section
+	 */
 	public void deselect() {
 		boolean okayToHide = true;
 		for (int i = 3; i >= 1; --i){
 			sections[i].deselect();
-			if (okayToHide && !sections[i].isTitle && sections[i].isEmpty()) {
+			if (okayToHide && sections[i].isEmpty()) {
 				getChildren().remove(sections[i]);
 			}
 			else {
@@ -82,7 +112,12 @@ public class Box extends VBox {
 		}
 	}
 	
+	/**
+	 * Called when the box is selected
+	 * Handles setting the state of each section
+	 */
 	public void select() {
+		requestFocus();
 		for (Section s : sections){
 			s.select();
 			if (getChildren().indexOf(s) == -1) {
@@ -90,5 +125,4 @@ public class Box extends VBox {
 			}
 		}
 	}
-	
 }
