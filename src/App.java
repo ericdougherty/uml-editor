@@ -7,10 +7,11 @@ public class App extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("UML Editor - fiVe");
+                primaryStage.setMaximized(true);
 		
 		Controller controller = new Controller();		
 
-		Scene scene = new Scene(controller.ui, 1200, 800);
+		Scene scene = new Scene(controller.ui );
 		scene.getStylesheets().add("style.css");
 		primaryStage.setScene(scene);
 		primaryStage.show();
