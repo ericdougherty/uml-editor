@@ -207,6 +207,7 @@ public class Controller {
 			toolbar.hideAddRelationButton();
 			toolbar.showEditRelationButtons();
 			toolbar.showDeleteButton();
+			selectedRelation.showText();
 		} else if (selectedRelation != relation) {
 			selectedRelation.setStroke(null);
 			selectedRelation = relation;
