@@ -1,4 +1,5 @@
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
@@ -124,5 +125,21 @@ public class Box extends VBox {
 				getChildren().add(s);
 			}
 		}
+	}
+	
+	public Section[] getSections() {
+		return sections;
+	}
+
+	public String serialize() {
+		String data="";
+		data += getLayoutX() + "\n" + getLayoutY() + "\n";
+		for (Section s : sections) {
+			for (Node l : s.getChildren()) {
+				data += ((TextLine) l).getText() + "\n";
+			}
+			data += "__section\n";
+		}
+		return data + "\n";
 	}
 }

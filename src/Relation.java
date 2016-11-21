@@ -126,7 +126,10 @@ public class Relation extends Line {
 	 * @param s - string to be displayed in input box bound to this relation
 	 */
 	public void addInput(String s) {
-		input.setText(s);
+		if (s.equals("add text here"))
+			input.setText("");
+		else
+			input.setText(s);
 		controller.workspace.getChildren().remove(text);
 		controller.workspace.getChildren().add(input);
 		

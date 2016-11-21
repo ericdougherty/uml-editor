@@ -88,5 +88,9 @@ public class Section extends VBox {
 			getChildren().add(placeholder);
 		}
 	}
+
+	public void addLine(String text) {
+		getChildren().add(new TextLine(text, this));
+	}
 		
 }
