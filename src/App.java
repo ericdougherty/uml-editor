@@ -7,7 +7,7 @@ public class App extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("UML Editor - fiVe");
-                primaryStage.setMaximized(true);
+        primaryStage.setMaximized(true);
 		
 		Controller controller = new Controller();		
 

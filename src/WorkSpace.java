@@ -19,8 +19,8 @@ public class WorkSpace extends Pane{
 		
 		controller = c;
 		WorkSpace workspace = this;
-		setMinWidth(1300);
-		setMinHeight(700);
+		//setMinWidth(1300);
+		//setMinHeight(700);
 		getStyleClass().add("noGrid");
 		
 		//Deselects all objects

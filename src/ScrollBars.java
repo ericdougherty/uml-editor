@@ -13,7 +13,8 @@ public class ScrollBars extends ScrollPane{
 		this.controller = c;
 		getStyleClass().add("scroll-pane");
 		setContent(c.workspace);
-		
+		setFitToWidth(true);
+		setFitToHeight(true);
 	}
 
 }

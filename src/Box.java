@@ -41,12 +41,12 @@ public class Box extends VBox {
 					x = previousx;
 					y = previousy;
 				}
-				if ((x + thisBox.getWidth()) > controller.workspace.getWidth() && (x > 1300)) {
-					controller.workspace.setMinWidth(x);
+				if ((x + thisBox.getWidth()) > controller.workspace.getWidth()) {
+					controller.workspace.setMinWidth(x + thisBox.getWidth());
 			        controller.scrollpane.setHvalue(controller.scrollpane.getHmax()); 
 				}
-				if ((y + thisBox.getHeight()) > controller.workspace.getHeight() && (y > 700)) {
-					controller.workspace.setMinHeight(y);
+				if ((y + thisBox.getHeight()) > controller.workspace.getHeight()) {
+					controller.workspace.setMinHeight(y + thisBox.getHeight());
 			        controller.scrollpane.setVvalue(controller.scrollpane.getVmax()); 
 				}
 				previousx = Math.floorDiv((int) x, 20) * 20;
