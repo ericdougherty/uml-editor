@@ -24,9 +24,9 @@ public class ContextMenu extends VBox {
 	ImageView singleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/singleRelation.png"), 60, 60, true, true));
 	ImageView doubleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/doubleRelation.png"), 60, 60, true, true));
     
-    ImageView aggrigation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/aggregation.png"), 60, 60, true, true));
-    ImageView composion = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/composition.png"), 60, 60, true, true));
-    ImageView dependency = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/association.png"), 60, 60, true, true));
+    ImageView aggregation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/aggregation.png"), 60, 60, true, true));
+    ImageView composition = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/composition.png"), 60, 60, true, true));
+    ImageView association = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/association.png"), 60, 60, true, true));
     ImageView generalization = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/generalization.png"), 60, 60, true, true));
     ImageView solidLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/solidLine.png"), 60, 60, true, true));
     ImageView dottedLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/dottedLine.png"), 60, 60, true, true));
@@ -110,7 +110,37 @@ public class ContextMenu extends VBox {
 				showDeleteButton();
 			}
 		});
+                
+                aggregation.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent arg0){
+                            controller.changeRelationType(1);
+                        }
+                });
+                
+                composition.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent arg0){
+                            controller.changeRelationType(3);
+                        }
+                });
+                
+                association.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent arg0){
+                            controller.changeRelationType(2);
+                        }
+                });
+                
+                generalization.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                        @Override
+                        public void handle(MouseEvent agr0){
+                            controller.changeRelationType(0);
+                        }
+                });
 	}
+        
+        
 
 	/**
 	 * Displays the delete button
@@ -165,7 +195,13 @@ public class ContextMenu extends VBox {
 			getChildren().add(singleRelation);
 		}
 	}
-	
+	public void showRelationTypeButtons(){
+                getChildren().add(aggregation);
+                getChildren().add(composition);
+                getChildren().add(association);
+                getChildren().add(generalization);
+        }
+        
 	/**
 	 * Hides the appropriate edit relation button
 	 */
@@ -174,6 +210,15 @@ public class ContextMenu extends VBox {
 		getChildren().remove(singleRelation);
 		getChildren().remove(doubleRelation);
 	}
+        
+        public void hideRelationTypeButtons(){
+                getChildren().remove(aggregation);
+                getChildren().remove(composition);
+                getChildren().remove(association);
+                getChildren().remove(generalization);
+        }
+        
+        
 	
 	/**
 	 * applies a shadow or removes a shadow from the addRelation button

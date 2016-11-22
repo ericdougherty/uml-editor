@@ -15,10 +15,13 @@ public class Relation extends Line {
 	private Controller controller;
 	private TextLine text;
 	private Input input = new Input(this);
+        private int relation_Type = GENERALIZATION;
 	
 	//relation types
 	static final int GENERALIZATION = 0;
 	static final int AGGREGATION = 1;
+        static final int ASSOCIATION = 2;
+        static final int COMPOSITION = 3;
 	//...
 	
 	private ImageView arrowHead;
@@ -240,6 +243,15 @@ public class Relation extends Line {
 		if (relationType == GENERALIZATION) {
 			arrowHead.setImage(new Image("/ui elements/gen.png", false));
 		}
+                if (relationType == ASSOCIATION) {
+			arrowHead.setImage(new Image("/ui elements/assoc.png", false));
+		}
+                if (relationType == AGGREGATION) {
+			arrowHead.setImage(new Image("/ui elements/agg.png", false));
+		}
+                if (relationType == COMPOSITION) {
+			arrowHead.setImage(new Image("/ui elements/comp.png", false));
+		}
 		//...
 		
 		if (!isSingleEnded()) {
@@ -320,5 +332,9 @@ public class Relation extends Line {
 	public boolean isSingleEnded() {
 		return secondArrowHead == null;
 	}
+        
+        public int relationType() {
+            return relation_Type;
+        }
 
 }
