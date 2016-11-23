@@ -105,6 +105,7 @@ public class Controller {
 			toolbar.hideDeleteButton();
 			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
+                        toolbar.hideRelationTypeButtons();
 			selectedRelation = null;
 		}
 	}
@@ -130,6 +131,7 @@ public class Controller {
 		if (selectedRelation != null) {
 			toolbar.hideDeleteButton();
 			toolbar.hideEditRelationButtons();
+                        toolbar.hideRelationTypeButtons();
 			toolbar.showAddBoxButton();
 			selectedRelation.setStroke(Color.GRAY);
 			selectedRelation.hideText();
@@ -222,6 +224,7 @@ public class Controller {
 			toolbar.hideAddRelationButton();
 			toolbar.showEditRelationButtons();
 			toolbar.showDeleteButton();
+                        toolbar.showRelationTypeButtons();
 			selectedRelation.showText();
 		} else if (selectedRelation != relation) {
 			selectedRelation.setStroke(null);
@@ -258,6 +261,12 @@ public class Controller {
 			selectedRelation.setDoubleEnded();
 		}
 	}
+        
+        public void changeRelationType(int type) {
+            if(selectedRelation != null) {
+                selectedRelation.setRelationType(type);
+            }
+        }
 
 	/**
 	 * Adds a box to the set and workspace
