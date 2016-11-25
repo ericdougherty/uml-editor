@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -143,6 +143,7 @@ public class Controller {
 	 * Hides the grid overlay from the workspace
 	 */
 	public void hideGrid() {
+		workspace.getStyleClass().remove("noBG");
 		workspace.getStyleClass().add("noGrid");
 	}
 
@@ -152,6 +153,10 @@ public class Controller {
 	public void showGrid() {
 		workspace.getStyleClass().remove("noGrid");
 		workspace.getStyleClass().add("grid");
+	}
+	
+	public void noBG() {
+		workspace.getStyleClass().add("noBG");
 	}
 
 	/**
@@ -318,6 +323,16 @@ public class Controller {
 
 	public void clear() {
 		workspace.getChildren().clear();
+	}
+	
+	public void print() {
+		PrinterJob job = PrinterJob.createPrinterJob();
+		job.showPageSetupDialog(null);
+		noBG();
+		job.printPage(workspace);
+		hideGrid();
+		job.endJob();
+		
 	}
 
 	public void save() throws IOException {

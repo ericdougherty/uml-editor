@@ -17,6 +17,10 @@
 	-fx-background-color: #434343;
 }
 
+.noBG {
+	-fx-background-color: #ffffff;
+}
+
 .box {
 	-fx-background-color: #666;
 	-fx-border-width: 0 0 3 0;
