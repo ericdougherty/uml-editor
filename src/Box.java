@@ -1,3 +1,5 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -95,6 +97,22 @@ public class Box extends VBox {
 		//created box starts selected
 		controller.addBox(this);
 		controller.selectBox(this);
+		
+		//listener to update relations when height of box is changed
+		heightProperty().addListener(new ChangeListener<Object>(){
+			@Override
+			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+				controller.updateRelations();
+			}
+	    });
+		
+		//listener to update relations when width of box is changed
+		widthProperty().addListener(new ChangeListener<Object>(){
+			@Override
+			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+				controller.updateRelations();
+			}
+	    });
 	}
 	
 	/**

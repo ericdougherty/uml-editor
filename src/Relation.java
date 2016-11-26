@@ -162,8 +162,6 @@ public class Relation extends Line {
 	
 	/**
 	 * arrow heads are to be properly positioned and rotated
-	 * Currently arrow heads can become incorrectly positioned when boxes collapse and expand
-	 * Currently dragging an attached box or clicking in the workspace, sets the arrow heads to the correct position
 	 */
 	public void update() {
 		updateArrowPosition(arrowHead, startBox, endBox);
@@ -239,7 +237,6 @@ public class Relation extends Line {
 	
 	/**
 	 * Arrow heads are set based on type of relation desired
-	 * Currently only contains implementation for generalization
 	 * secondArrowHead is updated if the relation is double ended
 	 * @param relationType - determines type of arrow head
 	 */
@@ -248,20 +245,20 @@ public class Relation extends Line {
 		if (relationType == GENERALIZATION) {
 			arrowHead.setImage(new Image("/ui elements/gen.png", false));
 		}
-                if (relationType == ASSOCIATION) {
+		if (relationType == ASSOCIATION) {
 			arrowHead.setImage(new Image("/ui elements/assoc.png", false));
 		}
-                if (relationType == AGGREGATION) {
+		if (relationType == AGGREGATION) {
 			arrowHead.setImage(new Image("/ui elements/agg.png", false));
 		}
-                if (relationType == COMPOSITION) {
+		if (relationType == COMPOSITION) {
 			arrowHead.setImage(new Image("/ui elements/comp.png", false));
 		}
-		//...
 		
 		if (!isSingleEnded()) {
 			secondArrowHead.setImage(arrowHead.getImage());
 		}
+		update();
 	}
 	
 	/**
@@ -314,7 +311,7 @@ public class Relation extends Line {
 		update();
 	}
 	
-	/*
+	/**
 	 * remove secondArrowHead
 	 */
 	public void setSingleEnded() {

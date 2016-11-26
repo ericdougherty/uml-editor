@@ -195,13 +195,7 @@ public class ContextMenu extends VBox {
 			getChildren().add(singleRelation);
 		}
 	}
-	public void showRelationTypeButtons(){
-                getChildren().add(aggregation);
-                getChildren().add(composition);
-                getChildren().add(association);
-                getChildren().add(generalization);
-        }
-        
+    
 	/**
 	 * Hides the appropriate edit relation button
 	 */
@@ -210,16 +204,21 @@ public class ContextMenu extends VBox {
 		getChildren().remove(singleRelation);
 		getChildren().remove(doubleRelation);
 	}
-        
-        public void hideRelationTypeButtons(){
-                getChildren().remove(aggregation);
-                getChildren().remove(composition);
-                getChildren().remove(association);
-                getChildren().remove(generalization);
-        }
-        
-        
 	
+	public void showRelationTypeButtons(){
+        getChildren().add(aggregation);
+        getChildren().add(composition);
+        getChildren().add(association);
+        getChildren().add(generalization);
+    }
+	
+    public void hideRelationTypeButtons(){
+        getChildren().remove(aggregation);
+        getChildren().remove(composition);
+        getChildren().remove(association);
+        getChildren().remove(generalization);
+    }
+    
 	/**
 	 * applies a shadow or removes a shadow from the addRelation button
 	 * @param b - boolean for whether a shadow should be applied or removed

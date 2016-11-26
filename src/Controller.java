@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
@@ -227,9 +228,9 @@ public class Controller {
 			selectedRelation.setStroke(Color.WHITE);
 			toolbar.hideAddBoxButton();
 			toolbar.hideAddRelationButton();
+			toolbar.showRelationTypeButtons();
 			toolbar.showEditRelationButtons();
 			toolbar.showDeleteButton();
-                        toolbar.showRelationTypeButtons();
 			selectedRelation.showText();
 		} else if (selectedRelation != relation) {
 			selectedRelation.setStroke(null);
