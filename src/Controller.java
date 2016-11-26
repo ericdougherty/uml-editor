@@ -9,6 +9,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 
 /**
@@ -106,7 +107,6 @@ public class Controller {
 			toolbar.hideDeleteButton();
 			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
-                        toolbar.hideRelationTypeButtons();
 			selectedRelation = null;
 		}
 	}
@@ -132,7 +132,6 @@ public class Controller {
 		if (selectedRelation != null) {
 			toolbar.hideDeleteButton();
 			toolbar.hideEditRelationButtons();
-                        toolbar.hideRelationTypeButtons();
 			toolbar.showAddBoxButton();
 			selectedRelation.setStroke(Color.GRAY);
 			selectedRelation.hideText();
@@ -228,15 +227,20 @@ public class Controller {
 			selectedRelation.setStroke(Color.WHITE);
 			toolbar.hideAddBoxButton();
 			toolbar.hideAddRelationButton();
-			toolbar.showRelationTypeButtons();
 			toolbar.showEditRelationButtons();
 			toolbar.showDeleteButton();
 			selectedRelation.showText();
 		} else if (selectedRelation != relation) {
-			selectedRelation.setStroke(null);
+			selectedRelation.setStroke(Paint.valueOf("#666666"));
+			selectedRelation.hideText();
 			selectedRelation = relation;
 			selectedRelation.setStroke(Color.WHITE);
+			selectedRelation.showText();
 		}
+		
+		toolbar.setArrowHeadTypeShadow(relation.getRelationType());
+		toolbar.setLineTypeShadow(relation.isDotted());
+		toolbar.setRelationEndingTypeShadow(relation.isSingleEnded());
 	}
 
 	/**
@@ -267,12 +271,24 @@ public class Controller {
 			selectedRelation.setDoubleEnded();
 		}
 	}
-        
-        public void changeRelationType(int type) {
-            if(selectedRelation != null) {
-                selectedRelation.setRelationType(type);
-            }
+	
+	public void setCurrentRelationSolid() {
+		if (selectedRelation != null) {
+			selectedRelation.setSolid();
+		}
+	}
+	
+	public void setCurrentRelationDotted() {
+		if (selectedRelation != null) {
+			selectedRelation.setDotted();
+		}
+	}
+	
+    public void setRelationType(int type) {
+        if(selectedRelation != null) {
+            selectedRelation.setRelationType(type);
         }
+    }
 
 	/**
 	 * Adds a box to the set and workspace
