@@ -15,13 +15,13 @@ public class Relation extends Line {
 	private Controller controller;
 	private TextLine text;
 	private Input input = new Input(this);
-        private int relation_Type = GENERALIZATION;
+    private int relation_Type = GENERALIZATION;
 	
 	//relation types
 	static final int GENERALIZATION = 0;
 	static final int AGGREGATION = 1;
-        static final int ASSOCIATION = 2;
-        static final int COMPOSITION = 3;
+    static final int ASSOCIATION = 2;
+    static final int COMPOSITION = 3;
 	//...
 	
 	private ImageView arrowHead;
@@ -122,6 +122,10 @@ public class Relation extends Line {
 	 */
 	public TextLine getText() {
 		return text;
+	}
+	
+	public void setText(String s) {
+		text.setText(s);
 	}
 	
 	/**
@@ -240,6 +244,7 @@ public class Relation extends Line {
 	 * @param relationType - determines type of arrow head
 	 */
 	public void setRelationType(int relationType) {
+		relation_Type = relationType;
 		if (relationType == GENERALIZATION) {
 			arrowHead.setImage(new Image("/ui elements/gen.png", false));
 		}
@@ -333,8 +338,23 @@ public class Relation extends Line {
 		return secondArrowHead == null;
 	}
         
-        public int relationType() {
-            return relation_Type;
-        }
+    public int relationType(){
+        return relation_Type;
+    }
 
+    public String serialize() {
+    	String data = "";
+    	data += startBox.getID() + "\n";
+    	data += endBox.getID() + "\n";
+    	data += text.getText() + "\n";
+    	data += relation_Type + "\n";
+    	if (secondArrowHead != null) {
+    		data += "second\n";
+    	}
+    	else {
+    		data += "\n";
+    	}
+    	
+    	return data + "\n";
+    }
 }
