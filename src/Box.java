@@ -13,6 +13,7 @@ public class Box extends VBox {
 	private Section[] sections = {new Section(this, "add class name", true), new Section(this, "add attribute", false), new Section(this, "add operation", false), new Section(this, "add miscellaneous", false)};
 	private Double offsetX;
 	private Double offsetY;
+	private int id;
 	int previousx = 0;
 	int previousy = 0;
 
@@ -130,8 +131,17 @@ public class Box extends VBox {
 	public Section[] getSections() {
 		return sections;
 	}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public void setID(int n) {
+		id = n;
+	}
 
-	public String serialize() {
+	public String serialize(int count) {
+		id = count;
 		String data="";
 		data += getLayoutX() + "\n" + getLayoutY() + "\n";
 		for (Section s : sections) {
@@ -140,6 +150,7 @@ public class Box extends VBox {
 			}
 			data += "__section\n";
 		}
+		data += id + "\n";
 		return data + "\n";
 	}
 }

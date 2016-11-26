@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -143,6 +143,7 @@ public class Controller {
 	 * Hides the grid overlay from the workspace
 	 */
 	public void hideGrid() {
+		workspace.getStyleClass().remove("noBG");
 		workspace.getStyleClass().add("noGrid");
 	}
 
@@ -152,6 +153,10 @@ public class Controller {
 	public void showGrid() {
 		workspace.getStyleClass().remove("noGrid");
 		workspace.getStyleClass().add("grid");
+	}
+	
+	public void noBG() {
+		workspace.getStyleClass().add("noBG");
 	}
 
 	/**
@@ -319,48 +324,114 @@ public class Controller {
 	public void clear() {
 		workspace.getChildren().clear();
 	}
+	
+	public void print() {
+		PrinterJob job = PrinterJob.createPrinterJob();
+		job.showPageSetupDialog(null);
+		noBG();
+		job.printPage(workspace);
+		hideGrid();
+		job.endJob();
+	}
 
 	public void save() throws IOException {
 		FileChooser fc = new FileChooser();
+		fc.setSelectedExtensionFilter(null);
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("UML document", "*.uml"));
 		File f = fc.showSaveDialog(null);
+		if (f == null) return;
 		FileWriter fw = new FileWriter(f);
 
+		int count = 0;
 		for (Node n : workspace.getChildren()) {
-			Box b = (Box) n;
-			fw.append(b.serialize());
+			if (Box.class.isInstance(n)) {
+				Box b = (Box) n;
+				fw.append(b.serialize(count));
+				++count;
+			}
 		}
-
+		
+		fw.append("__startRelations\n");
+		
+		for (Node n : workspace.getChildren()) {
+			if (Relation.class.isInstance(n)) {
+				Relation r = (Relation) n;
+				fw.append(r.serialize());
+			}
+		}
 		fw.close();
 	}
 
 	public void open() throws IOException {
 		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("UML document", "*.uml"));
 		File f = fc.showOpenDialog(null);
+		if (f == null) return;
 		Scanner s = new Scanner(f);
 		workspace.getChildren().clear();
+		boolean pastBoxes = false;
+		
 		while (s.hasNextLine()) {
-			Box b = new Box(this);
-			deselectBox();
-			b.setLayoutX(Double.parseDouble(s.nextLine().trim()));
-			b.setLayoutY(Double.parseDouble(s.nextLine().trim()));
-			int sec = 0;
-			while (sec < 4) {
-				while (true) {
-					String n = s.nextLine();
-					if (n.equals("__section"))
-						break;
-					else if (sec == 0)
-						((TextLine) b.getSections()[0].getChildren().get(0)).setText(n);
-					else
-						b.getSections()[sec].addLine(n);
-				}
-				++sec;
+			String line = s.nextLine();
+			if (line.equals("__startRelations")) {
+				pastBoxes = true;
+				line = s.nextLine();
 			}
-			s.nextLine();
-			selectBox(b);
-			deselectBox();
+			if (!pastBoxes){
+				Box box = new Box(this);
+				deselectBox();
+				box.setLayoutX(Double.parseDouble(line.trim()));
+				box.setLayoutY(Double.parseDouble(s.nextLine().trim()));
+				int sec = 0;
+				while (sec < 4) {
+					while (true) {
+						line = s.nextLine();
+						if (line.equals("__section"))
+							break;
+						else if (sec == 0)
+							((TextLine) box.getSections()[0].getChildren().get(0)).setText(line);
+						else
+							box.getSections()[sec].addLine(line);
+					}
+					++sec;
+				}
+				box.setID(Integer.parseInt(s.nextLine()));
+				System.out.println(s.nextLine());
+				selectBox(box);
+				deselectBox();
+			}
+			else {
+				selectBox(getBoxByID(Integer.parseInt(line)));
+				startNewRelation();
+				Relation r = currentRelation;
+				endCurrentRelation(getBoxByID(Integer.parseInt(s.nextLine())));
+				deselectBox();
+				String text = s.nextLine();
+				if (!text.equals("add text here")) {
+					r.setText(text);
+					r.showText();
+				}
+				r.setRelationType(Integer.parseInt(s.nextLine()));
+				if (s.nextLine().equals("second")) {
+					r.setDoubleEnded();
+				}
+				s.nextLine();
+				updateRelations();
+			}
 		}
 		s.close();
+	}
+	
+	public Box getBoxByID(int id) {
+		for (Node n : workspace.getChildren()) {
+			if (Box.class.isInstance(n)) {
+				Box b = (Box) n;
+				if (b.getID() == id) {
+					return b;
+				}
+			}
+		}
+		return null;
 	}
 
 }

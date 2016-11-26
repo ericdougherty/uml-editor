@@ -22,10 +22,18 @@ public class FileMenu extends MenuBar {
 		final Menu menuItem2 = new Menu("Preferences");
 		final Menu menuItem3 = new Menu("Help");
 		MenuItem newSpace = new MenuItem("New");
+		MenuItem print = new MenuItem("Print");
 		MenuItem save = new MenuItem("Save");
 		MenuItem open = new MenuItem("Open");
 		MenuItem exit = new MenuItem("Exit");
 
+		print.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent t) {
+				controller.print();
+			}
+		});
+		
 		newSpace.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
@@ -65,7 +73,7 @@ public class FileMenu extends MenuBar {
 		});
 
 		getMenus().addAll(menuItem1, menuItem2, menuItem3);
-		menuItem1.getItems().addAll(newSpace, save, open, exit );
+		menuItem1.getItems().addAll(newSpace, print, save, open, exit );
 
 		getStyleClass().add("menu");
 

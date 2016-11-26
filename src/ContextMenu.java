@@ -58,7 +58,7 @@ public class ContextMenu extends VBox {
 			@Override
 			public void handle(MouseEvent arg0) {
 				controller.deselectBox();
-				Box rect = new Box(controller);
+				new Box(controller);
 				controller.cancelCurrentRelation();
 			}
 		});
