@@ -15,15 +15,15 @@ public class Relation extends Line {
 	private Controller controller;
 	private TextLine text;
 	private Input input = new Input(this);
-    private int relation_Type = GENERALIZATION;
+    private int relationType = GENERALIZATION;
+    private boolean dotted = false;
 	
 	//relation types
 	static final int GENERALIZATION = 0;
 	static final int AGGREGATION = 1;
     static final int ASSOCIATION = 2;
     static final int COMPOSITION = 3;
-	//...
-	
+    
 	private ImageView arrowHead;
 	private ImageView secondArrowHead;
 	
@@ -241,7 +241,7 @@ public class Relation extends Line {
 	 * @param relationType - determines type of arrow head
 	 */
 	public void setRelationType(int relationType) {
-		relation_Type = relationType;
+		this.relationType = relationType;
 		if (relationType == GENERALIZATION) {
 			arrowHead.setImage(new Image("/ui elements/gen.png", false));
 		}
@@ -259,6 +259,10 @@ public class Relation extends Line {
 			secondArrowHead.setImage(arrowHead.getImage());
 		}
 		update();
+	}
+	
+	public int getRelationType() {
+		return relationType;
 	}
 	
 	/**
@@ -334,17 +338,27 @@ public class Relation extends Line {
 	public boolean isSingleEnded() {
 		return secondArrowHead == null;
 	}
-        
-    public int relationType(){
-        return relation_Type;
+    
+    public void setSolid() {
+		getStyleClass().remove("relation-dotted");
+		dotted = false;
     }
+    
+    public void setDotted() {
+		getStyleClass().add("relation-dotted");
+		dotted = true;
+    }
+    
+	public boolean isDotted() {
+		return dotted;
+	}
 
     public String serialize() {
     	String data = "";
     	data += startBox.getID() + "\n";
     	data += endBox.getID() + "\n";
     	data += text.getText() + "\n";
-    	data += relation_Type + "\n";
+    	data += relationType + "\n";
     	if (secondArrowHead != null) {
     		data += "second\n";
     	}

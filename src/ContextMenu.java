@@ -92,10 +92,7 @@ public class ContextMenu extends VBox {
 			@Override
 			public void handle(MouseEvent arg0) {
 				controller.setCurrentRelationSingleEnded();
-				hideEditRelationButtons();
-				hideDeleteButton();
-				showEditRelationButtons();
-				showDeleteButton();
+				setRelationEndingTypeShadow(true);
 			}
 		});
 
@@ -104,40 +101,57 @@ public class ContextMenu extends VBox {
 			@Override
 			public void handle(MouseEvent arg0) {
 				controller.setCurrentRelationDoubleEnded();
-				hideEditRelationButtons();
-				hideDeleteButton();
-				showEditRelationButtons();
-				showDeleteButton();
+				setRelationEndingTypeShadow(false);
 			}
 		});
                 
-                aggregation.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent arg0){
-                            controller.changeRelationType(1);
-                        }
-                });
-                
-                composition.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent arg0){
-                            controller.changeRelationType(3);
-                        }
-                });
-                
-                association.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent arg0){
-                            controller.changeRelationType(2);
-                        }
-                });
-                
-                generalization.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                        @Override
-                        public void handle(MouseEvent agr0){
-                            controller.changeRelationType(0);
-                        }
-                });
+		aggregation.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0){
+			    controller.setRelationType(Relation.AGGREGATION);
+			    setArrowHeadTypeShadow(Relation.AGGREGATION);
+			}
+		});
+		
+		composition.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0){
+			    controller.setRelationType(Relation.COMPOSITION);
+			    setArrowHeadTypeShadow(Relation.COMPOSITION);
+			}
+		});
+		
+		association.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0){
+			    controller.setRelationType(Relation.ASSOCIATION);
+			    setArrowHeadTypeShadow(Relation.ASSOCIATION);
+			}
+		});
+		
+		generalization.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent agr0){
+			    controller.setRelationType(Relation.GENERALIZATION);
+			    setArrowHeadTypeShadow(Relation.GENERALIZATION);
+			}
+		});
+		
+        solidLine.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				controller.setCurrentRelationSolid();
+				setLineTypeShadow(false);
+			}
+		});
+        
+        dottedLine.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				controller.setCurrentRelationDotted();
+				setLineTypeShadow(true);
+			}
+		});
 	}
         
         
@@ -188,35 +202,66 @@ public class ContextMenu extends VBox {
 	 * Displays the appropriate edit relation button
 	 */
 	public void showEditRelationButtons() {
-		if (controller.getSelectedRelation().isSingleEnded()) {
-			getChildren().add(doubleRelation);
-			getChildren().add(flipRelation);
-		} else {
-			getChildren().add(singleRelation);
-		}
+		getChildren().add(aggregation);
+		getChildren().add(composition);
+		getChildren().add(association);
+		getChildren().add(generalization);
+		getChildren().add(solidLine);
+		getChildren().add(dottedLine);
+		getChildren().add(singleRelation);
+		getChildren().add(doubleRelation);
+		getChildren().add(flipRelation);
 	}
     
 	/**
 	 * Hides the appropriate edit relation button
 	 */
 	public void hideEditRelationButtons() {
-		getChildren().remove(flipRelation);
+		getChildren().remove(aggregation);
+		getChildren().remove(composition);
+		getChildren().remove(association);
+		getChildren().remove(generalization);
+		getChildren().remove(solidLine);
+		getChildren().remove(dottedLine);
 		getChildren().remove(singleRelation);
 		getChildren().remove(doubleRelation);
+		getChildren().remove(flipRelation);
 	}
-	
-	public void showRelationTypeButtons(){
-        getChildren().add(aggregation);
-        getChildren().add(composition);
-        getChildren().add(association);
-        getChildren().add(generalization);
+    
+    public void setArrowHeadTypeShadow(int relationType) {
+    	aggregation.setEffect(null);
+    	composition.setEffect(null);
+    	association.setEffect(null);
+    	generalization.setEffect(null);
+    	if (relationType == Relation.AGGREGATION) {
+    		aggregation.setEffect(new DropShadow(25, Color.WHITE));
+    	} else if (relationType == Relation.COMPOSITION) {
+    		composition.setEffect(new DropShadow(25, Color.WHITE));
+    	} else if (relationType == Relation.ASSOCIATION) {
+    		association.setEffect(new DropShadow(25, Color.WHITE));
+    	} else if (relationType == Relation.GENERALIZATION) {
+    		generalization.setEffect(new DropShadow(25, Color.WHITE));
+    	}
     }
-	
-    public void hideRelationTypeButtons(){
-        getChildren().remove(aggregation);
-        getChildren().remove(composition);
-        getChildren().remove(association);
-        getChildren().remove(generalization);
+    
+    public void setLineTypeShadow(boolean dotted) {
+    	solidLine.setEffect(null);
+    	dottedLine.setEffect(null);
+    	if (dotted) {
+    		dottedLine.setEffect(new DropShadow(25, Color.WHITE));
+    	} else {
+    		solidLine.setEffect(new DropShadow(25, Color.WHITE));
+    	}
+    }
+    
+    public void setRelationEndingTypeShadow(boolean singleEnded) {
+    	singleRelation.setEffect(null);
+    	doubleRelation.setEffect(null);
+    	if (singleEnded) {
+    		singleRelation.setEffect(new DropShadow(25, Color.WHITE));
+    	} else {
+    		doubleRelation.setEffect(new DropShadow(25, Color.WHITE));
+    	}
     }
     
 	/**
@@ -225,7 +270,7 @@ public class ContextMenu extends VBox {
 	 */
 	public void setAddRelationShadow(boolean b) {
 		if (b) {
-			addRelation.setEffect(new DropShadow(20, Color.LIGHTGREY));
+			addRelation.setEffect(new DropShadow(25, Color.WHITE));
 		} else {
 			addRelation.setEffect(null);
 		}

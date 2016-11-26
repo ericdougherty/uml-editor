@@ -36,6 +36,10 @@
 	-fx-stroke-width: 3.0;
 }
 
+.relation-dotted {
+	-fx-stroke-dash-array: 2 12 12 2;
+}
+
 .menu {
 	-fx-background-color: #222;
 }
