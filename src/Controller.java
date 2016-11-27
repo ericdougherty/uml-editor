@@ -438,6 +438,9 @@ public class Controller {
 				if (s.nextLine().equals("second")) {
 					r.setDoubleEnded();
 				}
+				if (s.nextLine().equals("dotted")) {
+					r.setDotted();
+				}
 				s.nextLine();
 				updateRelations();
 			}
