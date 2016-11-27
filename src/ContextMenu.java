@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 
@@ -30,6 +31,8 @@ public class ContextMenu extends VBox {
     ImageView generalization = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/generalization.png"), 60, 60, true, true));
     ImageView solidLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/solidLine.png"), 60, 60, true, true));
     ImageView dottedLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/dottedLine.png"), 60, 60, true, true));
+    Separator sep1 = new Separator();
+    Separator sep2 = new Separator();
 
     /**
      * ContextMenu constructor
@@ -154,8 +157,6 @@ public class ContextMenu extends VBox {
 		});
 	}
         
-        
-
 	/**
 	 * Displays the delete button
 	 */
@@ -206,8 +207,10 @@ public class ContextMenu extends VBox {
 		getChildren().add(composition);
 		getChildren().add(association);
 		getChildren().add(generalization);
+		getChildren().add(sep1);
 		getChildren().add(solidLine);
 		getChildren().add(dottedLine);
+		getChildren().add(sep2);
 		getChildren().add(singleRelation);
 		getChildren().add(doubleRelation);
 		getChildren().add(flipRelation);
@@ -221,8 +224,10 @@ public class ContextMenu extends VBox {
 		getChildren().remove(composition);
 		getChildren().remove(association);
 		getChildren().remove(generalization);
+		getChildren().remove(sep1);
 		getChildren().remove(solidLine);
 		getChildren().remove(dottedLine);
+		getChildren().remove(sep2);
 		getChildren().remove(singleRelation);
 		getChildren().remove(doubleRelation);
 		getChildren().remove(flipRelation);
