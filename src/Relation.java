@@ -62,6 +62,7 @@ public class Relation extends Line {
 		arrowHead = new ImageView();
 	}
 
+
 	/**
 	 * Assigns endBox to passed parameter
 	 * endX and endY are bound to middle of endBox
@@ -80,6 +81,16 @@ public class Relation extends Line {
 		controller.workspace.getChildren().add(arrowHead);
 		addText();
 		update();
+		
+		Relation r = this;
+		arrowHead.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				controller.selectRelation(r);
+				// consume keeps event from interacting with elements below
+				event.consume();
+			}
+		});
 	}
 
 	public Box getStartBox() {
@@ -95,7 +106,7 @@ public class Relation extends Line {
 	 */
 	public void addText() {
 		text.layoutXProperty().bind(startXProperty().add(endXProperty()).divide(2));
-		text.layoutYProperty().bind(startYProperty().add(endYProperty()).divide(2));
+		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(5)).divide(2));
 	}
 	
 	/**
@@ -332,6 +343,16 @@ public class Relation extends Line {
 			secondArrowHead = new ImageView(arrowHead.getImage());
 			controller.workspace.getChildren().add(secondArrowHead);
 			update();
+			
+			Relation r = this;
+			secondArrowHead.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					controller.selectRelation(r);
+					// consume keeps event from interacting with elements below
+					event.consume();
+				}
+			});
 		}
 	}
 	
@@ -361,6 +382,12 @@ public class Relation extends Line {
     	data += relationType + "\n";
     	if (secondArrowHead != null) {
     		data += "second\n";
+    	}
+    	else {
+    		data += "\n";
+    	}
+    	if (isDotted()) {
+    		data += "dotted\n";
     	}
     	else {
     		data += "\n";
