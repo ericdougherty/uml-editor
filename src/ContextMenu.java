@@ -87,7 +87,7 @@ public class ContextMenu extends VBox {
 			}
 		});
 
-		//only available when a relation is selected and double ended
+		//only available when a relation is selected
 		singleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -96,7 +96,7 @@ public class ContextMenu extends VBox {
 			}
 		});
 
-		//only available when a relation is selected  and single ended
+		//only available when a relation is selected
 		doubleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -104,7 +104,8 @@ public class ContextMenu extends VBox {
 				setRelationEndingTypeShadow(false);
 			}
 		});
-                
+
+		//only available when a relation is selected
 		aggregation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0){
@@ -112,7 +113,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.AGGREGATION);
 			}
 		});
-		
+
+		//only available when a relation is selected
 		composition.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0){
@@ -120,7 +122,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.COMPOSITION);
 			}
 		});
-		
+
+		//only available when a relation is selected
 		association.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0){
@@ -128,7 +131,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.ASSOCIATION);
 			}
 		});
-		
+
+		//only available when a relation is selected
 		generalization.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent agr0){
@@ -136,7 +140,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.GENERALIZATION);
 			}
 		});
-		
+
+		//only available when a relation is selected
         solidLine.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -144,7 +149,8 @@ public class ContextMenu extends VBox {
 				setLineTypeShadow(false);
 			}
 		});
-        
+
+		//only available when a relation is selected
         dottedLine.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {

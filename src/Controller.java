@@ -192,6 +192,12 @@ public class Controller {
 			cancelCurrentRelation();
 		}
 	}
+	
+	public void setCurrentRelationEndPosition(double x, double y) {
+		if (currentRelation != null) {
+			currentRelation.setEndPoint(x, y);
+		}
+	}
 
 	/**
 	 * Getter for addingRelation

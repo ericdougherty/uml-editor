@@ -33,6 +33,15 @@ public class WorkSpace extends Pane{
 				controller.toolbar.setAddRelationShadow(false);
 			}
 		});
+		
+		setOnMouseMoved(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (controller.isAddingRelation()) {
+					controller.setCurrentRelationEndPosition(event.getX(), event.getY());
+				}
+			}
+		});
 	}
 
 }

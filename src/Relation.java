@@ -44,6 +44,7 @@ public class Relation extends Line {
 		// not necessarily a grid position
 		startXProperty().bind(startBox.layoutXProperty().add(startBox.widthProperty().divide(2)));
 		startYProperty().bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
+		
 		final Relation relation = this;
 
 		getStyleClass().add("relation");
@@ -80,6 +81,15 @@ public class Relation extends Line {
 		controller.workspace.getChildren().add(arrowHead);
 		addText();
 		update();
+	}
+	
+	public void setEndPoint(double x, double y) {
+		setEndX(x);
+		setEndY(y);
+		
+		setRelationType(GENERALIZATION);
+		controller.workspace.getChildren().add(arrowHead);
+		addText();
 	}
 
 	public Box getStartBox() {
