@@ -52,9 +52,13 @@ public class Relation extends Line {
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				controller.selectRelation(relation);
-				// consume keeps event from interacting with elements below
-				event.consume();
+				if (!controller.isAddingRelation()) {
+					controller.selectRelation(relation);
+					// consume keeps event from interacting with elements below
+					event.consume();
+				} else {
+					controller.displayInvalidRelationMessage();
+				}
 			}
 		});
 		
@@ -94,13 +98,9 @@ public class Relation extends Line {
 		});
 	}
 	
-	public void setEndPoint(double x, double y) {
+	public void setTempEndPoint(double x, double y) {
 		setEndX(x);
 		setEndY(y);
-		
-		setRelationType(GENERALIZATION);
-		controller.workspace.getChildren().add(arrowHead);
-		addText();
 	}
 
 	public Box getStartBox() {
