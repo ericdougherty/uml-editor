@@ -134,7 +134,7 @@ public class Controller {
 			toolbar.hideDeleteButton();
 			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
-			selectedRelation.setStroke(Color.GRAY);
+			selectedRelation.setStroke(Paint.valueOf("#666666"));
 			selectedRelation.hideText();
 			selectedRelation = null;
 		}
@@ -184,12 +184,18 @@ public class Controller {
 		if (b != null && !b.equals(currentRelation.getStartBox())) {
 			currentRelation.setEndPoint(b);
 			relations.add(currentRelation);
+			if (!workspace.getChildren().contains(currentRelation)) {
+				workspace.getChildren().add(currentRelation);
+				currentRelation.toBack();
+			}
+			deselectBox();
+			selectRelation(currentRelation);
 			currentRelation = null;
 			addingRelation = false;
 			toolbar.setAddRelationShadow(false);
 		} else {
 			// invalid ending box
-			cancelCurrentRelation();
+			displayInvalidRelationMessage();
 		}
 	}
 	
@@ -223,10 +229,14 @@ public class Controller {
 		toolbar.setAddRelationShadow(false);
 	}
 	
+	/**
+	 * To be called when an invalid end point is selected for a relation
+	 */
 	public void displayInvalidRelationMessage() {
 		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Warning");
         alert.setContentText("Select a Valid Class Box");
+        alert.setGraphic(null);
+        alert.setHeaderText(null);
         alert.show();
 	}
 
@@ -445,6 +455,8 @@ public class Controller {
 				updateRelations();
 			}
 		}
+		deselectBox();
+		deselectRelation();
 		s.close();
 	}
 	

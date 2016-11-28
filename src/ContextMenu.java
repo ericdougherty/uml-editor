@@ -84,8 +84,9 @@ public class ContextMenu extends VBox {
 			public void handle(MouseEvent arg0) {
 				if (controller.isAddingRelation()) {
 					controller.cancelCurrentRelation();
+				} else {
+					controller.startNewRelation();
 				}
-				controller.startNewRelation();
 			}
 		});
 

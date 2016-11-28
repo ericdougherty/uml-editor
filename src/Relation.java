@@ -2,6 +2,7 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 
 public class Relation extends Line {
@@ -46,7 +47,8 @@ public class Relation extends Line {
 		startYProperty().bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
 		
 		final Relation relation = this;
-
+		
+		setStroke(Paint.valueOf("#666666"));
 		getStyleClass().add("relation");
 
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -56,8 +58,6 @@ public class Relation extends Line {
 					controller.selectRelation(relation);
 					// consume keeps event from interacting with elements below
 					event.consume();
-				} else {
-					controller.displayInvalidRelationMessage();
 				}
 			}
 		});
