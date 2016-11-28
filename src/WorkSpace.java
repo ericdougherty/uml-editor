@@ -31,6 +31,18 @@ public class WorkSpace extends Pane{
 				controller.deselectRelation();
 				controller.deselectBox();
 				controller.toolbar.setAddRelationShadow(false);
+				if (controller.isAddingRelation()) {
+					controller.displayInvalidRelationMessage();
+				}
+			}
+		});
+		
+		setOnMouseMoved(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (controller.isAddingRelation()) {
+					controller.setCurrentRelationEndPosition(event.getX(), event.getY());
+				}
 			}
 		});
 	}

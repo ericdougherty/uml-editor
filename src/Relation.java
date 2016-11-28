@@ -2,6 +2,7 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 
 public class Relation extends Line {
@@ -44,16 +45,20 @@ public class Relation extends Line {
 		// not necessarily a grid position
 		startXProperty().bind(startBox.layoutXProperty().add(startBox.widthProperty().divide(2)));
 		startYProperty().bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
+		
 		final Relation relation = this;
-
+		
+		setStroke(Paint.valueOf("#666666"));
 		getStyleClass().add("relation");
 
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				controller.selectRelation(relation);
-				// consume keeps event from interacting with elements below
-				event.consume();
+				if (!controller.isAddingRelation()) {
+					controller.selectRelation(relation);
+					// consume keeps event from interacting with elements below
+					event.consume();
+				}
 			}
 		});
 		
@@ -91,6 +96,11 @@ public class Relation extends Line {
 				event.consume();
 			}
 		});
+	}
+	
+	public void setTempEndPoint(double x, double y) {
+		setEndX(x);
+		setEndY(y);
 	}
 
 	public Box getStartBox() {

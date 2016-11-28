@@ -24,13 +24,13 @@ public class ContextMenu extends VBox {
 	ImageView flipRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/flipRelation.png"), 60, 60, true, true));
 	ImageView singleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/singleRelation.png"), 60, 60, true, true));
 	ImageView doubleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/doubleRelation.png"), 60, 60, true, true));
-    
     ImageView aggregation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/aggregation.png"), 60, 60, true, true));
     ImageView composition = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/composition.png"), 60, 60, true, true));
     ImageView association = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/association.png"), 60, 60, true, true));
     ImageView generalization = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/generalization.png"), 60, 60, true, true));
     ImageView solidLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/solidLine.png"), 60, 60, true, true));
     ImageView dottedLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/dottedLine.png"), 60, 60, true, true));
+    
     Separator sep1 = new Separator();
     Separator sep2 = new Separator();
 
@@ -62,7 +62,9 @@ public class ContextMenu extends VBox {
 			public void handle(MouseEvent arg0) {
 				controller.deselectBox();
 				new Box(controller);
-				controller.cancelCurrentRelation();
+				if (controller.isAddingRelation()) {
+					controller.cancelCurrentRelation();
+				}
 			}
 		});
 		
@@ -70,7 +72,9 @@ public class ContextMenu extends VBox {
 			@Override
 			public void handle(MouseEvent arg0) {
 				controller.deleteSelected();
-				controller.cancelCurrentRelation();
+				if (controller.isAddingRelation()) {
+					controller.cancelCurrentRelation();
+				}
 			}
 		});
 
@@ -78,7 +82,11 @@ public class ContextMenu extends VBox {
 		addRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				controller.startNewRelation();
+				if (controller.isAddingRelation()) {
+					controller.cancelCurrentRelation();
+				} else {
+					controller.startNewRelation();
+				}
 			}
 		});
 
@@ -90,7 +98,7 @@ public class ContextMenu extends VBox {
 			}
 		});
 
-		//only available when a relation is selected and double ended
+		//only available when a relation is selected
 		singleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -99,7 +107,7 @@ public class ContextMenu extends VBox {
 			}
 		});
 
-		//only available when a relation is selected  and single ended
+		//only available when a relation is selected
 		doubleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -107,7 +115,8 @@ public class ContextMenu extends VBox {
 				setRelationEndingTypeShadow(false);
 			}
 		});
-                
+
+		//only available when a relation is selected
 		aggregation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0){
@@ -115,7 +124,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.AGGREGATION);
 			}
 		});
-		
+
+		//only available when a relation is selected
 		composition.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0){
@@ -123,7 +133,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.COMPOSITION);
 			}
 		});
-		
+
+		//only available when a relation is selected
 		association.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0){
@@ -131,7 +142,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.ASSOCIATION);
 			}
 		});
-		
+
+		//only available when a relation is selected
 		generalization.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent agr0){
@@ -139,7 +151,8 @@ public class ContextMenu extends VBox {
 			    setArrowHeadTypeShadow(Relation.GENERALIZATION);
 			}
 		});
-		
+
+		//only available when a relation is selected
         solidLine.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -147,7 +160,8 @@ public class ContextMenu extends VBox {
 				setLineTypeShadow(false);
 			}
 		});
-        
+
+		//only available when a relation is selected
         dottedLine.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {

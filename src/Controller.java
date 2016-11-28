@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -121,7 +123,6 @@ public class Controller {
 			selectedBox.deselect();
 			selectedBox.getStyleClass().remove("box-shadow");
 			selectedBox = null;
-			cancelCurrentRelation();
 		}
 	}
 
@@ -133,7 +134,7 @@ public class Controller {
 			toolbar.hideDeleteButton();
 			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
-			selectedRelation.setStroke(Color.GRAY);
+			selectedRelation.setStroke(Paint.valueOf("#666666"));
 			selectedRelation.hideText();
 			selectedRelation = null;
 		}
@@ -182,14 +183,29 @@ public class Controller {
 		// and the ending box and starting box are different
 		if (b != null && !b.equals(currentRelation.getStartBox())) {
 			currentRelation.setEndPoint(b);
-			addRelation(currentRelation);
-			currentRelation.toBack();
+			relations.add(currentRelation);
+			if (!workspace.getChildren().contains(currentRelation)) {
+				workspace.getChildren().add(currentRelation);
+				currentRelation.toBack();
+			}
+			deselectBox();
+			selectRelation(currentRelation);
 			currentRelation = null;
 			addingRelation = false;
 			toolbar.setAddRelationShadow(false);
 		} else {
 			// invalid ending box
-			cancelCurrentRelation();
+			displayInvalidRelationMessage();
+		}
+	}
+	
+	public void setCurrentRelationEndPosition(double x, double y) {
+		if (currentRelation != null && x > 0 && x < workspace.getWidth() && y > 0 && y < workspace.getHeight()) {
+			currentRelation.setTempEndPoint(x, y);
+			currentRelation.toBack();
+			if (!workspace.getChildren().contains(currentRelation)) {
+				workspace.getChildren().add(currentRelation);
+			}
 		}
 	}
 
@@ -208,8 +224,20 @@ public class Controller {
 	 */
 	public void cancelCurrentRelation() {
 		addingRelation = false;
+		workspace.getChildren().remove(currentRelation);
 		currentRelation = null;
 		toolbar.setAddRelationShadow(false);
+	}
+	
+	/**
+	 * To be called when an invalid end point is selected for a relation
+	 */
+	public void displayInvalidRelationMessage() {
+		Alert alert = new Alert(AlertType.WARNING);
+        alert.setContentText("Select a Valid Class Box");
+        alert.setGraphic(null);
+        alert.setHeaderText(null);
+        alert.show();
 	}
 
 	/**
@@ -219,7 +247,6 @@ public class Controller {
 	 *            - the Relation to be selected
 	 */
 	public void selectRelation(Relation relation) {
-
 		deselectBox();
 
 		if (selectedRelation == null) {
@@ -241,17 +268,6 @@ public class Controller {
 		toolbar.setArrowHeadTypeShadow(relation.getRelationType());
 		toolbar.setLineTypeShadow(relation.isDotted());
 		toolbar.setRelationEndingTypeShadow(relation.isSingleEnded());
-	}
-
-	/**
-	 * Adds a relation to the set and workspace
-	 * 
-	 * @param r
-	 *            - the relation to be added
-	 */
-	public void addRelation(Relation r) {
-		relations.add(r);
-		workspace.getChildren().add(r);
 	}
 
 	public void flipCurrentRelation() {
@@ -439,6 +455,8 @@ public class Controller {
 				updateRelations();
 			}
 		}
+		deselectBox();
+		deselectRelation();
 		s.close();
 	}
 	
