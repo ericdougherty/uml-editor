@@ -37,11 +37,12 @@ public class WorkSpace extends Pane{
 			}
 		});
 		
+		//updates temp relation end point while adding a relation
 		setOnMouseMoved(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				if (controller.isAddingRelation()) {
-					controller.setCurrentRelationEndPosition(event.getX(), event.getY());
+					controller.setRelationTempEndPosition(event.getX(), event.getY());
 				}
 			}
 		});

@@ -62,11 +62,9 @@ public class Controller {
 	/**
 	 * Selects a box
 	 * 
-	 * @param box
-	 *            - the Box that will be selected
+	 * @param box - the Box that will be selected
 	 */
 	public void selectBox(Box box) {
-
 		deselectRelation();
 
 		if (selectedBox != null && box != selectedBox) {
@@ -76,8 +74,8 @@ public class Controller {
 		selectedBox.getStyleClass().add("box-shadow");
 		selectedBox.select();
 
-		// remove buttons and re-add (addRelation only if there are more than
-		// one box)
+		// remove and re-add buttons (addRelation only if there are more than one box)
+		// buttons are re-added to get the order right
 		toolbar.hideDeleteButton();
 		toolbar.hideAddRelationButton();
 		if (boxes.size() > 1) {
@@ -91,11 +89,13 @@ public class Controller {
 	 * selectedRelation)
 	 */
 	public void deleteSelected() {
+		//delete selectedBox
 		if (selectedBox != null) {
 			workspace.getChildren().remove(selectedBox);
 			boxes.remove(selectedBox);
 			toolbar.hideDeleteButton();
 			toolbar.hideAddRelationButton();
+			
 			// remove any relations attached to the box being removed
 			Set<Relation> relationsToRemove = new HashSet<Relation>();
 			for (Relation r : relations) {
@@ -108,6 +108,8 @@ public class Controller {
 
 			selectedBox = null;
 		}
+		
+		//delete selected relation
 		if (selectedRelation != null) {
 			selectedRelation.remove();
 			toolbar.hideDeleteButton();
@@ -160,6 +162,9 @@ public class Controller {
 		workspace.getStyleClass().add("grid");
 	}
 	
+	/**
+	 * removes background for clearer prints
+	 */
 	public void noBG() {
 		workspace.getStyleClass().add("noBG");
 	}
@@ -179,8 +184,7 @@ public class Controller {
 	 * Completes a new Relation line, or cancels if an invalid endpoint is
 	 * passed
 	 * 
-	 * @param b
-	 *            - the endpoint box for the line
+	 * @param b - the end point box for the line
 	 */
 	public void endCurrentRelation(Box b) {
 		// only end relation if a box is selected
@@ -203,7 +207,12 @@ public class Controller {
 		}
 	}
 	
-	public void setCurrentRelationEndPosition(double x, double y) {
+	/**
+	 * temporarily sets the end position of the relation
+	 * @param x - temp endX
+	 * @param y - temp endY
+	 */
+	public void setRelationTempEndPosition(double x, double y) {
 		if (currentRelation != null && x > 0 && x < workspace.getWidth() && y > 0 && y < workspace.getHeight()) {
 			currentRelation.setTempEndPoint(x, y);
 			currentRelation.toBack();
@@ -223,8 +232,8 @@ public class Controller {
 	}
 
 	/**
-	 * Cancels adding a new relation Called if the user doesn't select a valid
-	 * endpoint for the Relation
+	 * Cancels adding a new relation
+	 * Called if the user doesn't select a valid end point for the Relation
 	 */
 	public void cancelCurrentRelation() {
 		addingRelation = false;
@@ -247,8 +256,7 @@ public class Controller {
 	/**
 	 * Selects a Relation line
 	 * 
-	 * @param relation
-	 *            - the Relation to be selected
+	 * @param relation - the Relation to be selected
 	 */
 	public void selectRelation(Relation relation) {
 		deselectBox();
@@ -269,6 +277,7 @@ public class Controller {
 			selectedRelation.showText();
 		}
 		
+		//update button highlights
 		toolbar.setArrowHeadTypeShadow(relation.getRelationType());
 		toolbar.setLineTypeShadow(relation.isDotted());
 		toolbar.setRelationEndingTypeShadow(relation.isSingleEnded());
@@ -313,8 +322,7 @@ public class Controller {
 	/**
 	 * Adds a box to the set and workspace
 	 * 
-	 * @param b-
-	 *            the box to be added
+	 * @param b - the box to be added
 	 */
 	public void addBox(Box b) {
 		boxes.add(b);
@@ -322,8 +330,7 @@ public class Controller {
 	}
 
 	/**
-	 * Iterates through all relations and runs the update method to adjust their
-	 * locations
+	 * Iterates through all relations and runs the update method to adjust their locations
 	 */
 	public void updateRelations() {
 		for (Relation r : relations) {
@@ -357,12 +364,18 @@ public class Controller {
 	public Set<Relation> getRelations() {
 		return relations;
 	}
-
+	
+	/**
+	 * Removes all children in the workspace
+	 */
 	public void clear() {
 		workspace.getChildren().clear();
 		changed = false;
 	}
 	
+	/**
+	 * Prints a select area of the workspace
+	 */
 	public void print() {
 		deselectBox();
 		deselectRelation();
@@ -378,6 +391,11 @@ public class Controller {
 		job.endJob();
 	}
 
+	/**
+	 * Saves the current workspace to a .uml file
+	 * @param saveAs - true: (save as), false (overwrite open file, if it exists)
+	 * @throws IOException
+	 */
 	public void save(boolean saveAs) throws IOException {
 		deselectBox();
 		deselectRelation();
@@ -411,6 +429,10 @@ public class Controller {
 		changed = true;
 	}
 
+	/**
+	 * Opens a valid .uml file
+	 * @throws IOException
+	 */
 	public void open() throws IOException {
 		FileChooser fc = new FileChooser();
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("UML document", "*.uml"));
@@ -488,6 +510,11 @@ public class Controller {
 		changed = false;
 	}
 	
+	/**
+	 * Gets the box with the given id
+	 * @param id - unique value corresponding to a specific box
+	 * @return the box corresponding to the given id
+	 */
 	public Box getBoxByID(int id) {
 		for (Node n : workspace.getChildren()) {
 			if (Box.class.isInstance(n)) {

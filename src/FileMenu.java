@@ -15,6 +15,10 @@ public class FileMenu extends MenuBar {
 
 	Controller controller;
 
+	/**
+	 * Sets actions for items in the file menu
+	 * @param c - reference to the controller
+	 */
 	public FileMenu(Controller c) {
 
 		controller = c;
@@ -29,6 +33,7 @@ public class FileMenu extends MenuBar {
 		MenuItem open = new MenuItem("Open");
 		MenuItem exit = new MenuItem("Exit");
 
+		//print workspace
 		print.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
@@ -36,6 +41,7 @@ public class FileMenu extends MenuBar {
 			}
 		});
 		
+		//clear workspace
 		newSpace.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
@@ -44,6 +50,7 @@ public class FileMenu extends MenuBar {
 			}
 		});
 		
+		//exit program
 		exit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
@@ -51,6 +58,7 @@ public class FileMenu extends MenuBar {
 			}
 		});
 		
+		//save current workspace
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -75,6 +83,7 @@ public class FileMenu extends MenuBar {
 			}
 		});
 		
+		//open valid uml file
 		open.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -91,7 +100,5 @@ public class FileMenu extends MenuBar {
 		menuItem1.getItems().addAll(newSpace, print, save, saveAs, open, exit );
 
 		getStyleClass().add("menu");
-
 	}
-
 }

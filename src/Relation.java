@@ -51,6 +51,7 @@ public class Relation extends Line {
 		setStroke(Paint.valueOf("#666666"));
 		getStyleClass().add("relation");
 
+		//select this relation
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -72,7 +73,6 @@ public class Relation extends Line {
 	 * Assigns endBox to passed parameter
 	 * endX and endY are bound to middle of endBox
 	 * Arrow head and optional text are added to relation
-	 * This relation is added to the workspace and displayed
 	 * 
 	 * @param endBox - box to bind endX and endY
 	 */
@@ -88,6 +88,7 @@ public class Relation extends Line {
 		update();
 		
 		Relation r = this;
+		//arrow head can be clicked to select this relation
 		arrowHead.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -99,6 +100,11 @@ public class Relation extends Line {
 		controller.changesMade();
 	}
 	
+	/**
+	 * temporarily set relation end point until valid box passed
+	 * @param x - temp end x
+	 * @param y - temp end y
+	 */
 	public void setTempEndPoint(double x, double y) {
 		setEndX(x);
 		setEndY(y);
@@ -146,6 +152,9 @@ public class Relation extends Line {
 		return text;
 	}
 	
+	/**
+	 * @param s - string to set as text on relation
+	 */
 	public void setText(String s) {
 		text.setText(s);
 	}
@@ -179,12 +188,15 @@ public class Relation extends Line {
 		controller.changesMade();
 	}
 	
+	/**
+	 * @return current arrow head image
+	 */
 	public ImageView getArrowHead() {
 		return arrowHead;
 	}
 	
 	/**
-	 * arrow heads are to be properly positioned and rotated
+	 * Arrow heads are to be properly positioned and rotated
 	 */
 	public void update() {
 		updateArrowPosition(arrowHead, startBox, endBox);
@@ -285,6 +297,9 @@ public class Relation extends Line {
 		controller.changesMade();
 	}
 	
+	/**
+	 * @return current arrow head type
+	 */
 	public int getRelationType() {
 		return relationType;
 	}
@@ -342,7 +357,7 @@ public class Relation extends Line {
 	}
 	
 	/**
-	 * remove secondArrowHead
+	 * Removes secondArrowHead
 	 */
 	public void setSingleEnded() {
 		controller.workspace.getChildren().remove(secondArrowHead);
@@ -377,12 +392,18 @@ public class Relation extends Line {
 		return secondArrowHead == null;
 	}
     
+	/**
+	 * Makes line solid
+	 */
     public void setSolid() {
-		getStyleClass().remove("relation-dotted");
+		getStyleClass().removeAll("relation-dotted");
 		dotted = false;
 		controller.changesMade();
     }
     
+    /**
+     * Makes line dotted
+     */
     public void setDotted() {
 		getStyleClass().add("relation-dotted");
 		dotted = true;
@@ -393,6 +414,10 @@ public class Relation extends Line {
 		return dotted;
 	}
 
+	/**
+	 * Translates this relation to a representative string
+	 * @return this relation represented as a string
+	 */
     public String serialize() {
     	String data = "";
     	data += startBox.getID() + "\n";
