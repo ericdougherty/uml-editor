@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 
 /**
@@ -24,6 +25,7 @@ public class FileMenu extends MenuBar {
 		MenuItem newSpace = new MenuItem("New");
 		MenuItem print = new MenuItem("Print");
 		MenuItem save = new MenuItem("Save");
+		MenuItem saveAs = new MenuItem("Save As...");
 		MenuItem open = new MenuItem("Open");
 		MenuItem exit = new MenuItem("Exit");
 
@@ -37,6 +39,7 @@ public class FileMenu extends MenuBar {
 		newSpace.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
+				controller.confirmDialog(false);
 				controller.clear();
 			}
 		});
@@ -44,7 +47,7 @@ public class FileMenu extends MenuBar {
 		exit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
-				System.exit(0);
+				Platform.exit();
 			}
 		});
 		
@@ -52,7 +55,19 @@ public class FileMenu extends MenuBar {
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					controller.save();
+					controller.save(false);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		saveAs.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					controller.save(true);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -73,7 +88,7 @@ public class FileMenu extends MenuBar {
 		});
 
 		getMenus().addAll(menuItem1, menuItem2, menuItem3);
-		menuItem1.getItems().addAll(newSpace, print, save, open, exit );
+		menuItem1.getItems().addAll(newSpace, print, save, saveAs, open, exit );
 
 		getStyleClass().add("menu");
 
