@@ -9,7 +9,6 @@ public class ScrollBars extends ScrollPane{
 	Controller controller;
 
 	public ScrollBars(Controller c) {
-		
 		this.controller = c;
 		getStyleClass().add("scroll-pane");
 		setContent(c.workspace);

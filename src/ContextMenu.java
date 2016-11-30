@@ -18,25 +18,26 @@ public class ContextMenu extends VBox {
 
 	Controller controller;
 	
+	//image views to act as "buttons"
 	ImageView delete = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/delete.png"), 60, 60, true, true));
 	ImageView addBox = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/addBox.png"), 60, 60, true, true));
 	ImageView addRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/addRelation.png"), 60, 60, true, true));
-	ImageView flipRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/flipRelation.png"), 60, 60, true, true));
-	ImageView singleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/singleRelation.png"), 60, 60, true, true));
-	ImageView doubleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/doubleRelation.png"), 60, 60, true, true));
     ImageView aggregation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/aggregation.png"), 60, 60, true, true));
     ImageView composition = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/composition.png"), 60, 60, true, true));
     ImageView association = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/association.png"), 60, 60, true, true));
     ImageView generalization = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/generalization.png"), 60, 60, true, true));
     ImageView solidLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/solidLine.png"), 60, 60, true, true));
     ImageView dottedLine = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/dottedLine.png"), 60, 60, true, true));
+	ImageView singleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/singleRelation.png"), 60, 60, true, true));
+	ImageView doubleRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/doubleRelation.png"), 60, 60, true, true));
+	ImageView flipRelation = new ImageView(new Image(getClass().getResourceAsStream("/ui elements/flipRelation.png"), 60, 60, true, true));
     
     Separator sep1 = new Separator();
     Separator sep2 = new Separator();
 
     /**
-     * ContextMenu constructor
-     * @param c - the Controller
+     * Sets actions for all "buttons"
+     * @param c - reference to controller
      */
 	public ContextMenu(Controller c) {
 		controller = c;
@@ -47,16 +48,23 @@ public class ContextMenu extends VBox {
 		//preferred width - need to unify button widths and this won't be an issue
 		setPrefWidth(80);
 		
+		//tooltips for buttons that may not be clear
 		Tooltip.install(addBox, new Tooltip("Add Class Box"));
 		Tooltip.install(addRelation, new Tooltip("Add Relation"));
 		Tooltip.install(delete, new Tooltip("Delete"));
+		Tooltip.install(aggregation, new Tooltip("Aggregation"));
+		Tooltip.install(composition, new Tooltip("Composition"));
+		Tooltip.install(association, new Tooltip("Association"));
+		Tooltip.install(generalization, new Tooltip("Generalization"));
+		Tooltip.install(solidLine, new Tooltip("Solid Line"));
+		Tooltip.install(dottedLine, new Tooltip("Dotted Line"));
+		Tooltip.install(singleRelation, new Tooltip("Single Ended"));
+		Tooltip.install(doubleRelation, new Tooltip("Double Ended"));
 		Tooltip.install(flipRelation, new Tooltip("Flip Relation"));
-		Tooltip.install(singleRelation, new Tooltip("Make Relation Single Ended"));
-		Tooltip.install(doubleRelation, new Tooltip("Make Relation Double Ended"));
 		
 		getChildren().add(addBox);
 		getStyleClass().add("vbox");
-
+		//only available when a box or the workspace is selected
 		addBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -68,6 +76,7 @@ public class ContextMenu extends VBox {
 			}
 		});
 		
+		//only available when a box or relation is selected
         delete.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -214,7 +223,7 @@ public class ContextMenu extends VBox {
 	}
 
 	/**
-	 * Displays the appropriate edit relation button
+	 * Displays all edit relation button
 	 */
 	public void showEditRelationButtons() {
 		getChildren().add(aggregation);
@@ -231,7 +240,7 @@ public class ContextMenu extends VBox {
 	}
     
 	/**
-	 * Hides the appropriate edit relation button
+	 * Hides all edit relation button
 	 */
 	public void hideEditRelationButtons() {
 		getChildren().remove(aggregation);
@@ -247,11 +256,18 @@ public class ContextMenu extends VBox {
 		getChildren().remove(flipRelation);
 	}
     
+	/**
+	 * highlight the button that matches the selected relations arrow head type
+	 * @param relationType - selected relations arrow head type
+	 */
     public void setArrowHeadTypeShadow(int relationType) {
+    	//remove any highlight effects
     	aggregation.setEffect(null);
     	composition.setEffect(null);
     	association.setEffect(null);
     	generalization.setEffect(null);
+
+    	//set applicable highlighting
     	if (relationType == Relation.AGGREGATION) {
     		aggregation.setEffect(new DropShadow(25, Color.WHITE));
     	} else if (relationType == Relation.COMPOSITION) {
@@ -263,9 +279,16 @@ public class ContextMenu extends VBox {
     	}
     }
     
+    /**
+     * highlight the button that matches the selected relations line type
+     * @param dotted - true: (line is dotted), false: (line is solid) 
+     */
     public void setLineTypeShadow(boolean dotted) {
+    	//remove any highlight effects
     	solidLine.setEffect(null);
     	dottedLine.setEffect(null);
+
+    	//set applicable highlighting
     	if (dotted) {
     		dottedLine.setEffect(new DropShadow(25, Color.WHITE));
     	} else {
@@ -273,9 +296,16 @@ public class ContextMenu extends VBox {
     	}
     }
     
+    /**
+     * highlight the button that matches the selected relations number of arrow heads
+     * @param singleEnded - true: (singleEnded), false: (double ended)
+     */
     public void setRelationEndingTypeShadow(boolean singleEnded) {
+    	//remove any highlight effects
     	singleRelation.setEffect(null);
     	doubleRelation.setEffect(null);
+    	
+    	//set applicable highlighting
     	if (singleEnded) {
     		singleRelation.setEffect(new DropShadow(25, Color.WHITE));
     	} else {
@@ -284,8 +314,8 @@ public class ContextMenu extends VBox {
     }
     
 	/**
-	 * applies a shadow or removes a shadow from the addRelation button
-	 * @param b - boolean for whether a shadow should be applied or removed
+	 * applies a highlight or removes a highlight from the addRelation button
+	 * @param b - true: (apply highlight), false: (remove highlight)
 	 */
 	public void setAddRelationShadow(boolean b) {
 		if (b) {
@@ -294,5 +324,4 @@ public class ContextMenu extends VBox {
 			addRelation.setEffect(null);
 		}
 	}
-
 }

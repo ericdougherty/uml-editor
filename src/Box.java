@@ -77,7 +77,7 @@ public class Box extends VBox {
 			}
 		});
 		
-		//Handles selectingthe box or adding relation lines on click
+		//Handles selecting the box or adding relation lines on click
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {				
@@ -100,14 +100,6 @@ public class Box extends VBox {
 		
 		//listener to update relations when height of box is changed
 		heightProperty().addListener(new ChangeListener<Object>(){
-			@Override
-			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				controller.updateRelations();
-			}
-	    });
-		
-		//listener to update relations when width of box is changed
-		widthProperty().addListener(new ChangeListener<Object>(){
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
 				controller.updateRelations();
@@ -157,7 +149,13 @@ public class Box extends VBox {
 	public void setID(int n) {
 		id = n;
 	}
-
+	
+	/**
+	 * Translate this box to a representative string for saving
+	 * 
+	 * @param count - unique value for this box's id
+	 * @return this box represented as a string
+	 */
 	public String serialize(int count) {
 		id = count;
 		String data="";
