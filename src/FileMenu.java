@@ -1,6 +1,7 @@
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.event.EventHandler;
 
 import java.io.IOException;
@@ -8,9 +9,7 @@ import java.io.IOException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 
-/**
- * FileMenu Class Currently just a visual placeholder - no functionality
- */
+
 public class FileMenu extends MenuBar {
 
 	Controller controller;
@@ -24,8 +23,6 @@ public class FileMenu extends MenuBar {
 		controller = c;
 
 		final Menu menuItem1 = new Menu("File");
-		final Menu menuItem2 = new Menu("Preferences");
-		final Menu menuItem3 = new Menu("Help");
 		MenuItem newSpace = new MenuItem("New");
 		MenuItem print = new MenuItem("Print");
 		MenuItem save = new MenuItem("Save");
@@ -54,6 +51,7 @@ public class FileMenu extends MenuBar {
 		exit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
+				controller.confirmDialog(true);	
 				Platform.exit();
 			}
 		});
@@ -88,6 +86,7 @@ public class FileMenu extends MenuBar {
 			@Override
 			public void handle(ActionEvent event) {
 				try {
+					controller.confirmDialog(false);	
 					controller.open();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -96,8 +95,8 @@ public class FileMenu extends MenuBar {
 			}
 		});
 
-		getMenus().addAll(menuItem1, menuItem2, menuItem3);
-		menuItem1.getItems().addAll(newSpace, print, save, saveAs, open, exit );
+		getMenus().add(menuItem1);
+		menuItem1.getItems().addAll(newSpace, new SeparatorMenuItem(), print, new SeparatorMenuItem(), save, saveAs, open, new SeparatorMenuItem(), exit );
 
 		getStyleClass().add("menu");
 	}
