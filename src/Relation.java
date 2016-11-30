@@ -96,6 +96,7 @@ public class Relation extends Line {
 				event.consume();
 			}
 		});
+		controller.changesMade();
 	}
 	
 	public void setTempEndPoint(double x, double y) {
@@ -175,6 +176,7 @@ public class Relation extends Line {
 		controller.workspace.getChildren().remove(input);
 		showText();
 		hideText();
+		controller.changesMade();
 	}
 	
 	public ImageView getArrowHead() {
@@ -280,6 +282,7 @@ public class Relation extends Line {
 			secondArrowHead.setImage(arrowHead.getImage());
 		}
 		update();
+		controller.changesMade();
 	}
 	
 	public int getRelationType() {
@@ -294,6 +297,7 @@ public class Relation extends Line {
 		controller.workspace.getChildren().remove(text);
 		controller.workspace.getChildren().remove(arrowHead);
 		controller.workspace.getChildren().remove(secondArrowHead);
+		controller.changesMade();
 	}
 	
 	/**
@@ -334,6 +338,7 @@ public class Relation extends Line {
 		startBox = endBox;
 		endBox = temp;
 		update();
+		controller.changesMade();
 	}
 	
 	/**
@@ -343,6 +348,7 @@ public class Relation extends Line {
 		controller.workspace.getChildren().remove(secondArrowHead);
 		secondArrowHead = null;
 		update();
+		controller.changesMade();
 	}
 	
 	/**
@@ -364,6 +370,7 @@ public class Relation extends Line {
 				}
 			});
 		}
+		controller.changesMade();
 	}
 	
 	public boolean isSingleEnded() {
@@ -373,11 +380,13 @@ public class Relation extends Line {
     public void setSolid() {
 		getStyleClass().remove("relation-dotted");
 		dotted = false;
+		controller.changesMade();
     }
     
     public void setDotted() {
 		getStyleClass().add("relation-dotted");
 		dotted = true;
+		controller.changesMade();
     }
     
 	public boolean isDotted() {

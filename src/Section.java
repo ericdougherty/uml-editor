@@ -63,6 +63,7 @@ public class Section extends VBox {
 				addInput(prompt, null);
 			}
 		}
+		parent.controller.changesMade();
 	}
 	/**
 	 * Removes the placeholder TextLines

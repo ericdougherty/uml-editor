@@ -21,11 +21,13 @@ public class TextLine extends Text {
 		super(s);
 		
 		parent = p;
-		TextLine thisLine = this;
-		
+		TextLine thisLine = this;	
 		//keeps box width from expanding
 		setWrappingWidth(141);
-
+		getStyleClass().add("boxText");
+		if (p.isTitle) {
+			getStyleClass().add("title");
+		}
 
 		 //When clicked, create Input to replace this TextLine
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -49,7 +51,7 @@ public class TextLine extends Text {
 		
 		parent = null;
 		relation = r;
-		
+		getStyleClass().add("lineText");
 		TextLine thisLine = this;
 		
 		//When clicked, create Input to replace this TextLine

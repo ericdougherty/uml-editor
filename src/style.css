@@ -5,6 +5,7 @@
 .section {
 	-fx-border-width: 3 3 0 3;
 	-fx-border-color: #333;
+	-fx-padding: 5 5 5 5;
 }
 
 .grid {
@@ -57,4 +58,21 @@
 
 .scroll-pane .scroll-bar {
 	-fx-background-color: #222;
+}
+
+.lineText {
+	-fx-font-family: Tahoma;
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+	-fx-fill: #999;
+}
+
+.boxText {
+	-fx-font-family: Tahoma;
+	-fx-font-size: 14px;
+	-fx-fill: #222;
+}
+
+.title {
+	-fx-font-weight: bold;
 }
