@@ -2,12 +2,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -15,10 +17,10 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 
 /**
- * Controller Class Communicates with most Panes and Nodes -selectedBox and
- * selectedRelation track the currently selected object -One or both of
- * selectedBox and selectedRelation must be null at all times -currentRelation
- * is a relation that has been started, but doesn't have an endpoint yet
+ * Controller Class Communicates with most Panes and Nodes 
+ * -selectedBox and selectedRelation track the currently selected object 
+ * -One or both of selectedBox and selectedRelation must be null at all times 
+ * -currentRelation is a relation that has been started, but doesn't have an endpoint yet
  * -addingRelation is a boolean tracking if a user has begun the 'add relation'
  * process but has not yet clicked a 2nd box -relations is a set of all active
  * relations
@@ -36,6 +38,8 @@ public class Controller {
 	private Relation selectedRelation;
 	private Set<Box> boxes;
 	private Set<Relation> relations;
+	private File saveFile;
+	private boolean changed;
 
 	/**
 	 * Controller constructor Initializes controller with all UI elements
@@ -199,7 +203,7 @@ public class Controller {
 			toolbar.setAddRelationShadow(false);
 		} else {
 			// invalid ending box
-			displayInvalidRelationMessage();
+			warning("Select a Valid Class Box");
 		}
 	}
 	
@@ -241,9 +245,9 @@ public class Controller {
 	/**
 	 * To be called when an invalid end point is selected for a relation
 	 */
-	public void displayInvalidRelationMessage() {
+	public void warning(String msg) {
 		Alert alert = new Alert(AlertType.WARNING);
-        alert.setContentText("Select a Valid Class Box");
+        alert.setContentText(msg);
         alert.setGraphic(null);
         alert.setHeaderText(null);
         alert.show();
@@ -366,31 +370,43 @@ public class Controller {
 	 */
 	public void clear() {
 		workspace.getChildren().clear();
+		changed = false;
 	}
 	
 	/**
 	 * Prints a select area of the workspace
 	 */
 	public void print() {
+		deselectBox();
+		deselectRelation();
 		PrinterJob job = PrinterJob.createPrinterJob();
-		job.showPageSetupDialog(null);
+		if (job == null) {
+			warning("No printer found");
+			return;
+		}
+		job.showPrintDialog(null);
 		noBG();
 		job.printPage(workspace);
 		hideGrid();
 		job.endJob();
 	}
-	
+
 	/**
 	 * Saves the current workspace to a .uml file
+	 * @param saveAs - true: (save as), false (overwrite open file, if it exists)
 	 * @throws IOException
 	 */
-	public void save() throws IOException {
-		FileChooser fc = new FileChooser();
-		fc.setSelectedExtensionFilter(null);
-		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("UML document", "*.uml"));
-		File f = fc.showSaveDialog(null);
-		if (f == null) return;
-		FileWriter fw = new FileWriter(f);
+	public void save(boolean saveAs) throws IOException {
+		deselectBox();
+		deselectRelation();
+		if (saveFile == null || saveAs) {
+			FileChooser fc = new FileChooser();
+			fc.setSelectedExtensionFilter(null);
+			fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("UML document", "*.uml"));
+			saveFile = fc.showSaveDialog(null);
+		}
+		if (saveFile == null) return;
+		FileWriter fw = new FileWriter(saveFile);
 
 		int count = 0;
 		for (Node n : workspace.getChildren()) {
@@ -410,6 +426,7 @@ public class Controller {
 			}
 		}
 		fw.close();
+		changed = true;
 	}
 
 	/**
@@ -419,9 +436,14 @@ public class Controller {
 	public void open() throws IOException {
 		FileChooser fc = new FileChooser();
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("UML document", "*.uml"));
-		File f = fc.showOpenDialog(null);
-		if (f == null) return;
-		Scanner s = new Scanner(f);
+		File temp = fc.showOpenDialog(null);
+		if (temp == null) {
+			return;
+		}
+		else {
+			saveFile = temp;
+		}
+		Scanner s = new Scanner(saveFile);
 		workspace.getChildren().clear();
 		boolean pastBoxes = false;
 		
@@ -429,7 +451,12 @@ public class Controller {
 			String line = s.nextLine();
 			if (line.equals("__startRelations")) {
 				pastBoxes = true;
-				line = s.nextLine();
+				if (s.hasNextLine()) {
+					line = s.nextLine();
+				}
+				else {
+					break;
+				}
 			}
 			if (!pastBoxes){
 				Box box = new Box(this);
@@ -454,6 +481,7 @@ public class Controller {
 				selectBox(box);
 				deselectBox();
 			}
+
 			else {
 				selectBox(getBoxByID(Integer.parseInt(line)));
 				startNewRelation();
@@ -479,6 +507,7 @@ public class Controller {
 		deselectBox();
 		deselectRelation();
 		s.close();
+		changed = false;
 	}
 	
 	/**
@@ -496,6 +525,34 @@ public class Controller {
 			}
 		}
 		return null;
+	}
+	
+	public void changesMade() {
+		changed = true;
+	}
+	
+	public void confirmDialog (boolean exiting) {
+		if (changed) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Warning");
+			alert.setContentText("The document has unsaved changes. Would you like to save these changes?");
+			alert.setHeaderText("Unsaved Changes");
+			ButtonType save = new ButtonType("Save");
+			ButtonType exit = new ButtonType("Discard Changes");
+			if (exiting){
+				save = new ButtonType("Save and Exit");
+				exit = new ButtonType("Discard Changes and Exit");
+			}
+			alert.getButtonTypes().setAll(save, exit);	
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == save) {
+				try {
+					save(false);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 }

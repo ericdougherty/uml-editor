@@ -57,6 +57,7 @@ public class Box extends VBox {
 				//round to nearest 20 px
 				relocate(Math.floorDiv((int) x, 20) * 20, Math.floorDiv((int) y, 20) * 20);
 				controller.updateRelations();
+				controller.changesMade();
 			}
 		});
 		
@@ -105,6 +106,7 @@ public class Box extends VBox {
 				controller.updateRelations();
 			}
 	    });
+		controller.changesMade();
 	}
 	
 	/**

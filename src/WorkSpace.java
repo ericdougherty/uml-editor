@@ -32,7 +32,7 @@ public class WorkSpace extends Pane{
 				controller.deselectBox();
 				controller.toolbar.setAddRelationShadow(false);
 				if (controller.isAddingRelation()) {
-					controller.displayInvalidRelationMessage();
+					controller.warning("Select a Valid Class Box");
 				}
 			}
 		});
