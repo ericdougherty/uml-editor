@@ -34,6 +34,7 @@ public class ContextMenu extends VBox {
     
     Separator sep1 = new Separator();
     Separator sep2 = new Separator();
+    Separator sep3 = new Separator();
 
     /**
      * Sets actions for all "buttons"
@@ -111,8 +112,11 @@ public class ContextMenu extends VBox {
 		singleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				controller.setCurrentRelationSingleEnded();
-				setRelationEndingTypeShadow(true);
+				if (!controller.getSelectedRelation().isSingleEnded()){
+					controller.setCurrentRelationSingleEnded();
+					setRelationEndingTypeShadow(true);
+					flipRelationButton(true);
+				}
 			}
 		});
 
@@ -120,8 +124,11 @@ public class ContextMenu extends VBox {
 		doubleRelation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				controller.setCurrentRelationDoubleEnded();
-				setRelationEndingTypeShadow(false);
+				if (controller.getSelectedRelation().isSingleEnded()){
+					controller.setCurrentRelationDoubleEnded();
+					setRelationEndingTypeShadow(false);
+					flipRelationButton(false);
+				}
 			}
 		});
 
@@ -221,6 +228,15 @@ public class ContextMenu extends VBox {
 	public void hideAddRelationButton() {
 		getChildren().remove(addRelation);
 	}
+	
+	public void flipRelationButton(boolean show) {
+		if (show) {
+			getChildren().add(10, flipRelation);;
+		}
+		else {
+			getChildren().remove(flipRelation);
+		}
+	}
 
 	/**
 	 * Displays all edit relation button
@@ -236,7 +252,11 @@ public class ContextMenu extends VBox {
 		getChildren().add(sep2);
 		getChildren().add(singleRelation);
 		getChildren().add(doubleRelation);
-		getChildren().add(flipRelation);
+		if (controller.getSelectedRelation().isSingleEnded()){
+			getChildren().add(flipRelation);
+		}
+		getChildren().add(sep3);
+		
 	}
     
 	/**
@@ -254,6 +274,7 @@ public class ContextMenu extends VBox {
 		getChildren().remove(singleRelation);
 		getChildren().remove(doubleRelation);
 		getChildren().remove(flipRelation);
+		getChildren().remove(sep3);
 	}
     
 	/**
