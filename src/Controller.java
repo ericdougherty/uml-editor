@@ -112,6 +112,7 @@ public class Controller {
 		//delete selected relation
 		if (selectedRelation != null) {
 			selectedRelation.remove();
+			relations.remove(selectedRelation);
 			toolbar.hideDeleteButton();
 			toolbar.hideEditRelationButtons();
 			toolbar.showAddBoxButton();
