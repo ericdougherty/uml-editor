@@ -30,9 +30,20 @@ public class WorkSpace extends Pane{
 				workspace.requestFocus();
 				controller.deselectRelation();
 				controller.deselectBox();
-				//Temporary: clicking in workspace will fix all mispositioned arrowheads
-				controller.updateRelations();
 				controller.toolbar.setAddRelationShadow(false);
+				if (controller.isAddingRelation()) {
+					controller.warning("Select a Valid Class Box");
+				}
+			}
+		});
+		
+		//updates temp relation end point while adding a relation
+		setOnMouseMoved(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (controller.isAddingRelation()) {
+					controller.setRelationTempEndPosition(event.getX(), event.getY());
+				}
 			}
 		});
 	}

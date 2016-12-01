@@ -2,6 +2,7 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 
 public class Relation extends Line {
@@ -15,12 +16,15 @@ public class Relation extends Line {
 	private Controller controller;
 	private TextLine text;
 	private Input input = new Input(this);
+    private int relationType = GENERALIZATION;
+    private boolean dotted = false;
 	
 	//relation types
 	static final int GENERALIZATION = 0;
 	static final int AGGREGATION = 1;
-	//...
-	
+    static final int ASSOCIATION = 2;
+    static final int COMPOSITION = 3;
+    
 	private ImageView arrowHead;
 	private ImageView secondArrowHead;
 	
@@ -41,16 +45,21 @@ public class Relation extends Line {
 		// not necessarily a grid position
 		startXProperty().bind(startBox.layoutXProperty().add(startBox.widthProperty().divide(2)));
 		startYProperty().bind(startBox.layoutYProperty().add(startBox.heightProperty().divide(2)));
+		
 		final Relation relation = this;
-
+		
+		setStroke(Paint.valueOf("#666666"));
 		getStyleClass().add("relation");
 
+		//select this relation
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				controller.selectRelation(relation);
-				// consume keeps event from interacting with elements below
-				event.consume();
+				if (!controller.isAddingRelation()) {
+					controller.selectRelation(relation);
+					// consume keeps event from interacting with elements below
+					event.consume();
+				}
 			}
 		});
 		
@@ -59,11 +68,11 @@ public class Relation extends Line {
 		arrowHead = new ImageView();
 	}
 
+
 	/**
 	 * Assigns endBox to passed parameter
 	 * endX and endY are bound to middle of endBox
 	 * Arrow head and optional text are added to relation
-	 * This relation is added to the workspace and displayed
 	 * 
 	 * @param endBox - box to bind endX and endY
 	 */
@@ -77,6 +86,28 @@ public class Relation extends Line {
 		controller.workspace.getChildren().add(arrowHead);
 		addText();
 		update();
+		
+		Relation r = this;
+		//arrow head can be clicked to select this relation
+		arrowHead.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				controller.selectRelation(r);
+				// consume keeps event from interacting with elements below
+				event.consume();
+			}
+		});
+		controller.changesMade();
+	}
+	
+	/**
+	 * temporarily set relation end point until valid box passed
+	 * @param x - temp end x
+	 * @param y - temp end y
+	 */
+	public void setTempEndPoint(double x, double y) {
+		setEndX(x);
+		setEndY(y);
 	}
 
 	public Box getStartBox() {
@@ -92,7 +123,7 @@ public class Relation extends Line {
 	 */
 	public void addText() {
 		text.layoutXProperty().bind(startXProperty().add(endXProperty()).divide(2));
-		text.layoutYProperty().bind(startYProperty().add(endYProperty()).divide(2));
+		text.layoutYProperty().bind(startYProperty().add(endYProperty().subtract(5)).divide(2));
 	}
 	
 	/**
@@ -122,11 +153,21 @@ public class Relation extends Line {
 	}
 	
 	/**
+	 * @param s - string to set as text on relation
+	 */
+	public void setText(String s) {
+		text.setText(s);
+	}
+	
+	/**
 	 * An input box is bound to the midpoint of the line
 	 * @param s - string to be displayed in input box bound to this relation
 	 */
 	public void addInput(String s) {
-		input.setText(s);
+		if (s.equals("add text here"))
+			input.setText("");
+		else
+			input.setText(s);
 		controller.workspace.getChildren().remove(text);
 		controller.workspace.getChildren().add(input);
 		
@@ -144,16 +185,18 @@ public class Relation extends Line {
 		controller.workspace.getChildren().remove(input);
 		showText();
 		hideText();
+		controller.changesMade();
 	}
 	
+	/**
+	 * @return current arrow head image
+	 */
 	public ImageView getArrowHead() {
 		return arrowHead;
 	}
 	
 	/**
-	 * arrow heads are to be properly positioned and rotated
-	 * Currently arrow heads can become incorrectly positioned when boxes collapse and expand
-	 * Currently dragging an attached box or clicking in the workspace, sets the arrow heads to the correct position
+	 * Arrow heads are to be properly positioned and rotated
 	 */
 	public void update() {
 		updateArrowPosition(arrowHead, startBox, endBox);
@@ -229,19 +272,36 @@ public class Relation extends Line {
 	
 	/**
 	 * Arrow heads are set based on type of relation desired
-	 * Currently only contains implementation for generalization
 	 * secondArrowHead is updated if the relation is double ended
 	 * @param relationType - determines type of arrow head
 	 */
 	public void setRelationType(int relationType) {
+		this.relationType = relationType;
 		if (relationType == GENERALIZATION) {
 			arrowHead.setImage(new Image("/ui elements/gen.png", false));
 		}
-		//...
+		if (relationType == ASSOCIATION) {
+			arrowHead.setImage(new Image("/ui elements/assoc.png", false));
+		}
+		if (relationType == AGGREGATION) {
+			arrowHead.setImage(new Image("/ui elements/agg.png", false));
+		}
+		if (relationType == COMPOSITION) {
+			arrowHead.setImage(new Image("/ui elements/comp.png", false));
+		}
 		
 		if (!isSingleEnded()) {
 			secondArrowHead.setImage(arrowHead.getImage());
 		}
+		update();
+		controller.changesMade();
+	}
+	
+	/**
+	 * @return current arrow head type
+	 */
+	public int getRelationType() {
+		return relationType;
 	}
 	
 	/**
@@ -252,6 +312,7 @@ public class Relation extends Line {
 		controller.workspace.getChildren().remove(text);
 		controller.workspace.getChildren().remove(arrowHead);
 		controller.workspace.getChildren().remove(secondArrowHead);
+		controller.changesMade();
 	}
 	
 	/**
@@ -292,15 +353,17 @@ public class Relation extends Line {
 		startBox = endBox;
 		endBox = temp;
 		update();
+		controller.changesMade();
 	}
 	
-	/*
-	 * remove secondArrowHead
+	/**
+	 * Removes secondArrowHead
 	 */
 	public void setSingleEnded() {
 		controller.workspace.getChildren().remove(secondArrowHead);
 		secondArrowHead = null;
 		update();
+		controller.changesMade();
 	}
 	
 	/**
@@ -311,11 +374,69 @@ public class Relation extends Line {
 			secondArrowHead = new ImageView(arrowHead.getImage());
 			controller.workspace.getChildren().add(secondArrowHead);
 			update();
+			
+			Relation r = this;
+			secondArrowHead.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					controller.selectRelation(r);
+					// consume keeps event from interacting with elements below
+					event.consume();
+				}
+			});
 		}
+		controller.changesMade();
 	}
 	
 	public boolean isSingleEnded() {
 		return secondArrowHead == null;
 	}
+    
+	/**
+	 * Makes line solid
+	 */
+    public void setSolid() {
+		getStyleClass().removeAll("relation-dotted");
+		dotted = false;
+		controller.changesMade();
+    }
+    
+    /**
+     * Makes line dotted
+     */
+    public void setDotted() {
+		getStyleClass().add("relation-dotted");
+		dotted = true;
+		controller.changesMade();
+    }
+    
+	public boolean isDotted() {
+		return dotted;
+	}
 
+	/**
+	 * Translates this relation to a representative string
+	 * @return this relation represented as a string
+	 */
+    public String serialize() {
+    	String data = "";
+    	data += startBox.getID() + "\n";
+    	data += endBox.getID() + "\n";
+    	data += text.getText() + "\n";
+    	data += relationType + "\n";
+    	if (secondArrowHead != null) {
+    		data += "second\n";
+    	}
+    	else {
+    		data += "\n";
+    	}
+    	if (isDotted()) {
+    		data += "dotted\n";
+    	}
+    	else {
+    		data += "\n";
+    	}
+    	
+    	return data + "\n";
+    }
 }

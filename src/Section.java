@@ -63,6 +63,7 @@ public class Section extends VBox {
 				addInput(prompt, null);
 			}
 		}
+		parent.controller.changesMade();
 	}
 	/**
 	 * Removes the placeholder TextLines
@@ -87,6 +88,10 @@ public class Section extends VBox {
 			TextLine placeholder = new TextLine(prompt, this);
 			getChildren().add(placeholder);
 		}
+	}
+
+	public void addLine(String text) {
+		getChildren().add(new TextLine(text, this));
 	}
 		
 }

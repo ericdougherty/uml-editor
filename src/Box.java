@@ -1,4 +1,7 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
@@ -12,6 +15,7 @@ public class Box extends VBox {
 	private Section[] sections = {new Section(this, "add class name", true), new Section(this, "add attribute", false), new Section(this, "add operation", false), new Section(this, "add miscellaneous", false)};
 	private Double offsetX;
 	private Double offsetY;
+	private int id;
 	int previousx = 0;
 	int previousy = 0;
 
@@ -53,6 +57,7 @@ public class Box extends VBox {
 				//round to nearest 20 px
 				relocate(Math.floorDiv((int) x, 20) * 20, Math.floorDiv((int) y, 20) * 20);
 				controller.updateRelations();
+				controller.changesMade();
 			}
 		});
 		
@@ -73,7 +78,7 @@ public class Box extends VBox {
 			}
 		});
 		
-		//Handles selectingthe box or adding relation lines on click
+		//Handles selecting the box or adding relation lines on click
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {				
@@ -93,6 +98,15 @@ public class Box extends VBox {
 		//created box starts selected
 		controller.addBox(this);
 		controller.selectBox(this);
+		
+		//listener to update relations when height of box is changed
+		heightProperty().addListener(new ChangeListener<Object>(){
+			@Override
+			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+				controller.updateRelations();
+			}
+	    });
+		controller.changesMade();
 	}
 	
 	/**
@@ -124,5 +138,37 @@ public class Box extends VBox {
 				getChildren().add(s);
 			}
 		}
+	}
+	
+	public Section[] getSections() {
+		return sections;
+	}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public void setID(int n) {
+		id = n;
+	}
+	
+	/**
+	 * Translate this box to a representative string for saving
+	 * 
+	 * @param count - unique value for this box's id
+	 * @return this box represented as a string
+	 */
+	public String serialize(int count) {
+		id = count;
+		String data="";
+		data += getLayoutX() + "\n" + getLayoutY() + "\n";
+		for (Section s : sections) {
+			for (Node l : s.getChildren()) {
+				data += ((TextLine) l).getText() + "\n";
+			}
+			data += "__section\n";
+		}
+		data += id + "\n";
+		return data + "\n";
 	}
 }

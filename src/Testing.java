@@ -52,6 +52,10 @@ public class Testing {
 		
 		assertTrue("selectedBox should be null", c.getSelectedBox() == null);
 		
+		c.selectBox(box);
+		box.getSections()[2].addLine("test line");
+		c.deselectBox();
+		assertTrue("Box should have 3 section", box.getChildren().size() == 3);
 	}
 	
 	@Test
@@ -89,27 +93,44 @@ public class Testing {
 		assertTrue("addingRelation should be true", c.isAddingRelation());
 		c.endCurrentRelation(boxB);
 		
-		//Where is fifth element coming from?
-		//assertTrue("Should be 4 elements in the workspace", c.workspace.getChildren().size() == 4);
+		// 3boxes + 1relation + 1arrowhead + 1textbox = 6
+		assertTrue("Should be 6 elements in the workspace", c.workspace.getChildren().size() == 6);
 		assertTrue("Should be 1 relation in relations", c.getRelations().size() == 1);
 		
 		Relation r = c.getRelations().iterator().next();
 		assertTrue("r should start at boxC", r.getStartBox() == boxC);
 		assertTrue("r should end at boxB", r.getEndBox() == boxB);
 		
-		assertTrue("boxC should still be selected", c.getSelectedBox() == boxC);
-		assertTrue("selectedRelation should be null", c.getSelectedRelation() == null);
+		assertTrue("boxC should not be selected", c.getSelectedBox() == null);
+		assertTrue("r should be selected", c.getSelectedRelation() == r);
 		
 		c.selectRelation(r);
 		assertTrue("r should be selected", c.getSelectedRelation() == r);
 		assertTrue("selectedBox should be null", c.getSelectedBox() == null);
 		
+		//test original relation attributes
+		assertTrue("text should contain prompt", r.getText().getText().equals("add text here"));
+		assertTrue("should be solid", !r.isDotted());
+		assertTrue("should have an generalization arrow head", r.getRelationType() == Relation.GENERALIZATION);
+		assertTrue("should be single ended", r.isSingleEnded());
+		
+		//test modified relation attributes
+		r.addInput("test");
+		r.processInput();
+		r.setDotted();
+		r.setRelationType(Relation.AGGREGATION);
+		r.setDoubleEnded();
+		assertTrue("text should contain test", r.getText().getText().equals("test"));
+		assertTrue("should be dotted", r.isDotted());
+		assertTrue("should have an aggreation arrow head", r.getRelationType() == Relation.AGGREGATION);
+		assertTrue("should be double ended", !r.isSingleEnded());
+		
 		c.deleteSelected();
-
 		//are relations being removed from the set properly?
 		//assertTrue("relations should be empty", c.getRelations().isEmpty());
 		assertTrue("selectedRelation should be null", c.getSelectedRelation() == null);
 		assertTrue("selectedBox should be null", c.getSelectedBox() == null);
+		assertTrue("Should be 0 relation in relations", c.getRelations().size() == 0);
 	}
 	
 	@Test
@@ -149,8 +170,8 @@ public class Testing {
 
 		assertTrue("r should be selected", c.getSelectedRelation() == r);
 		assertTrue("selectedBox should be null", c.getSelectedBox() == null);
-		assertTrue("One button should be showing", c.toolbar.getChildren().size() == 1);
-		assertTrue("Button should be delete", c.toolbar.getChildren().get(0) == c.toolbar.delete);
-		
+		assertTrue("10 buttons and 3 seperators should be showing", c.toolbar.getChildren().size() == 13);
+		assertTrue("Button should be aggregation", c.toolbar.getChildren().get(0) == c.toolbar.aggregation);
+		assertTrue("Button should be delete", c.toolbar.getChildren().get(12) == c.toolbar.delete);
 	}
 }

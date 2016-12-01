@@ -5,6 +5,7 @@
 .section {
 	-fx-border-width: 3 3 0 3;
 	-fx-border-color: #333;
+	-fx-padding: 5 5 5 5;
 }
 
 .grid {
@@ -17,6 +18,10 @@
 	-fx-background-color: #434343;
 }
 
+.noBG {
+	-fx-background-color: #ffffff;
+}
+
 .box {
 	-fx-background-color: #666;
 	-fx-border-width: 0 0 3 0;
@@ -24,12 +29,15 @@
 }
 
 .box-shadow {
-	-fx-effect: dropshadow(three-pass-box, #666, 30, 0, 0, 0);
+	-fx-effect: dropshadow(three-pass-box, #888, 40, 0, 0, 0);
 }
 
 .relation {
-	-fx-stroke: #666;
 	-fx-stroke-width: 3.0;
+}
+
+.relation-dotted {
+	-fx-stroke-dash-array: 2 12 12 2;
 }
 
 .menu {
@@ -50,4 +58,21 @@
 
 .scroll-pane .scroll-bar {
 	-fx-background-color: #222;
+}
+
+.lineText {
+	-fx-font-family: Tahoma;
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+	-fx-fill: #999;
+}
+
+.boxText {
+	-fx-font-family: Tahoma;
+	-fx-font-size: 14px;
+	-fx-fill: #222;
+}
+
+.title {
+	-fx-font-weight: bold;
 }
