@@ -369,8 +369,11 @@ public class Controller {
 	 * Removes all children in the workspace
 	 */
 	public void clear() {
+		deselectBox();
+		deselectRelation();
 		workspace.getChildren().clear();
 		changed = false;
+		saveFile = null;
 	}
 	
 	/**
@@ -426,7 +429,7 @@ public class Controller {
 			}
 		}
 		fw.close();
-		changed = true;
+		changed = false;
 	}
 
 	/**
