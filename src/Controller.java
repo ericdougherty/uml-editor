@@ -388,10 +388,11 @@ public class Controller {
 			warning("No printer found");
 			return;
 		}
-		job.showPrintDialog(null);
-		noBG();
-		job.printPage(workspace);
-		hideGrid();
+		if (job.showPrintDialog(null)){
+			noBG();
+			job.printPage(workspace);
+			hideGrid();
+		};
 		job.endJob();
 	}
 
@@ -531,10 +532,17 @@ public class Controller {
 		return null;
 	}
 	
+	/**
+	 * Setter for "changed" a controller instance variable that tracks if changes have been made in the document
+	 */
 	public void changesMade() {
 		changed = true;
 	}
 	
+	/**
+	 * Pops up a dialog to allowing the user to save before exiting or creating a new document
+	 * @param exiting - true if exiting or false if just creating a new document
+	 */
 	public void confirmDialog (boolean exiting) {
 		if (changed) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
