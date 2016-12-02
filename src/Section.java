@@ -21,7 +21,7 @@ public class Section extends VBox {
 		prompt = s;
 		isTitle = t;
 		
-		setMinHeight(30);
+		setMinHeight(15);
 		getStyleClass().add("section");
 	}
 
